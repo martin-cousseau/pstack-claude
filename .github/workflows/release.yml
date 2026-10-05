@@ -1,0 +1,36 @@
+name: Release
+
+# Publishes v<plugin version> with pstack.plugin attached whenever main gets a
+# plugin version that has no release yet. The sync agent bumps the version;
+# this workflow does the publishing, so agents never need release permissions.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - plugin/.claude-plugin/plugin.json
+      - .github/workflows/release.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Release the plugin version if it has no release yet
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(jq -r .version plugin/.claude-plugin/plugin.json)
+          tag="v$version"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "$tag is already released"
+            exit 0
+          fi
+          (cd plugin && zip -qr ../pstack.plugin . -x '*.DS_Store' -x '*/node_modules/*')
+          awk -v head="## $version " 'index($0, head) == 1 { found = 1; next } /^## / { if (found) exit } found' CHANGELOG.md > notes.md
+          printf '\nInstall: see the [README](https://github.com/%s#install).\n' "$GITHUB_REPOSITORY" >> notes.md
+          gh release create "$tag" pstack.plugin --title "pstack $version" --notes-file notes.md --target "$GITHUB_SHA"

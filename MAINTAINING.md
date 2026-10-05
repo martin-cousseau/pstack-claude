@@ -22,6 +22,7 @@ This file is the runbook for the Claude agents that maintain this repo, and for 
 | `tools/residual-allowlist.tsv` | Lines that mention Cursor on purpose, reviewed. |
 | `tools/build.sh [ref]` | Clones `cursor/plugins` into `.upstream/plugins`, checks out `ref` (default `origin/main`), builds `plugin/`, and packages `dist/pstack.plugin`. |
 | `tools/verify.py [--smoke]` | Static checks, plus two headless Claude runs with `--smoke`. |
+| `.github/workflows/` | `verify.yml` (CI: reproducible rebuild plus static checks), `release.yml` (publishes each new plugin version), `close-external.yml` (closes non-owner issues and PRs). |
 | `shortcuts/` | User-level `pstack` and `poteto-mode` skills that drop the plugin prefix. |
 | `CHANGELOG.md` | One entry per landed sync or fix. |
 
@@ -74,7 +75,7 @@ The scheduled task runs this. A quiet run, with nothing upstream and nothing fro
    - **No changes under `tools/` and every check passes:** commit `sync: pstack <version> (cursor/plugins@<sha7>)`, rebase on `origin/main`, and push `main`.
    - **Anything changed under `tools/`:** push branch `sync/<sha7>` and open a pull request with `gh api` (REST). The body lists each judgment call, the file, why, and the verify output. Do not merge it.
    - **Verify still fails after a real attempt:** open the pull request anyway, titled `sync blocked: ...`, with the failing check output. Leave `main` alone.
-7. **Release.** After a push to `main`, create release `v<plugin version>` targeting that commit, with release notes from the changelog entry. Upload `dist/pstack.plugin` as an asset (`gh api` to `uploads.github.com`). If the upload is refused, publish the release without the asset and say so.
+7. **Release.** Releases are automatic, because agent sessions cannot create them. `.github/workflows/release.yml` publishes `v<plugin version>` with `pstack.plugin` attached and the changelog entry as notes whenever a push to `main` carries a version with no release yet. A few minutes after pushing, confirm with `gh api repos/martin-cousseau/pstack-claude/releases/latest --jq .tag_name`. Also check that the `Verify` workflow run for the pushed commit succeeded (`gh api "repos/martin-cousseau/pstack-claude/actions/runs?head_sha=<sha>"`). If it failed, fix it in the same run.
 8. **Owner issues.** For each open issue by `martin-cousseau`:
    - If it is a port bug or a change inside this spec, fix it in `tools/`, build, verify, and land per step 6. Comment with what changed and close it once it is on `main`.
    - If it needs the owner's decision, comment once with the analysis and options, then leave it. Never comment twice without new information.
