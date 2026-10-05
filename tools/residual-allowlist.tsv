@@ -1,0 +1,15 @@
+# path suffix<TAB>substring. A residual hit on a line containing the substring, in a file ending with the path, is reviewed and correct as is.
+docs/guide/05-build-and-clean.md	comes from Cursor's `cursor-team-kit` plugin
+skills/pstack/SKILL.md	ported from Cursor
+skills/poteto-mode/SKILL.md	is named `Task` in some Claude Code versions
+skills/setup-pstack/SKILL.md	the Claude counterpart of Cursor's always-applied rule
+skills/poteto-help/SKILL.md	for the upstream Cursor original
+skills/poteto-help/SKILL.md	which was built for Cursor
+skills/poteto-help/SKILL.md	Cursor-only, kept for reference
+skills/poteto-help/SKILL.md	come from Cursor's `cursor-team-kit` plugin
+skills/why/SKILL.md	cursor location
+skills/typescript-best-practices/SKILL.md	readonly __brand
+skills/typescript-best-practices/references/patterns.md	readonly __brand
+skills/poteto-mode/playbooks/opening-a-pr.md	Branch from trunk only for independent work
+skills/poteto-mode/playbooks/worktree-cleanup.md	if Cursor is also installed
+skills/poteto-mode/playbooks/multi-phase-plan.md	<Task as a verb phrase>

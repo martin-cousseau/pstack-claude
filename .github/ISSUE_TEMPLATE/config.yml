@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: pstack itself (skills, playbooks, principles)
+    url: https://github.com/cursor/plugins/issues
+    about: Problems or ideas about pstack belong upstream. Issues here from accounts other than the owner are closed automatically.
+  - name: Security problem in this port
+    url: https://github.com/martin-cousseau/pstack-claude/security/advisories/new
+    about: Report privately through GitHub's vulnerability reporting.

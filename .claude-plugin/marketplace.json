@@ -1,0 +1,16 @@
+{
+  "name": "pstack-claude",
+  "owner": {
+    "name": "Martin Cousseau"
+  },
+  "metadata": {
+    "description": "Claude Code marketplace for pstack-claude: poteto's pstack engineering workflows, ported from Cursor and kept in sync by Claude agents."
+  },
+  "plugins": [
+    {
+      "name": "pstack",
+      "source": "./plugin",
+      "description": "poteto's pstack, ported from Cursor to Claude: poteto-mode, 23 playbooks, 24 engineering principles, and multi-model review workflows."
+    }
+  ]
+}

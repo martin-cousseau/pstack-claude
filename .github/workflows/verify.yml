@@ -1,0 +1,37 @@
+name: Verify
+
+# Rebuilds plugin/ from the pinned upstream commit, fails if the committed
+# plugin/ differs (nobody edited generated files by hand, and tools/ still
+# reproduces it), then runs the static checks. The headless --smoke runs need a
+# signed-in Claude Code, so only the sync agent runs those.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: oven-sh/setup-bun@v2
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq zip ripgrep jq
+          npm install -g @anthropic-ai/claude-code
+      - name: Rebuild from the pinned upstream commit
+        run: tools/build.sh "$(cat UPSTREAM)"
+      - name: Committed plugin matches the rebuild
+        run: git diff --exit-code --stat -- plugin
+      - name: Static checks
+        run: python3 tools/verify.py

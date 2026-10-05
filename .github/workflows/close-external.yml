@@ -1,0 +1,44 @@
+name: Close external issues and PRs
+
+# Only the repository owner's issues and pull requests stay open. Everything
+# else gets one polite comment and is closed. The owner can reopen any item to
+# keep it; a reopen by the owner is never re-closed.
+#
+# pull_request_target is safe here: the job never checks out or runs PR code,
+# and every event field reaches the shell through env, not inline expressions.
+
+on:
+  issues:
+    types: [opened, reopened]
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  close:
+    runs-on: ubuntu-latest
+    if: >-
+      github.actor != github.repository_owner &&
+      (github.event.issue.user.login || github.event.pull_request.user.login) != github.repository_owner
+    steps:
+      - name: Comment and close
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
+          IS_PR: ${{ github.event.pull_request != null }}
+        run: |
+          body="Thanks for taking the time to open this. This repository is maintained by automation for its owner, so issues and pull requests from other accounts are closed automatically.
+
+          - For problems or ideas about pstack itself, please go upstream to https://github.com/cursor/plugins.
+          - To report a security problem in this port, use **Security → Report a vulnerability** on this repo.
+          - Forks are welcome. The build tooling in \`tools/\` works for any fork."
+          gh api "repos/$REPO/issues/$NUMBER/comments" -f body="$body" >/dev/null
+          if [ "$IS_PR" = "true" ]; then
+            gh api -X PATCH "repos/$REPO/pulls/$NUMBER" -f state=closed >/dev/null
+          else
+            gh api -X PATCH "repos/$REPO/issues/$NUMBER" -f state=closed -f state_reason=not_planned >/dev/null
+          fi
