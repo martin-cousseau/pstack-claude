@@ -131,14 +131,27 @@ PATCHES = [
 
     # ---- model panels --------------------------------------------------------
     ("skills/interrogate/SKILL.md",
+     "extending or shrinking the Reviewer A/B labels below", "extending or shrinking the Reviewer A/B/C labels below"),
+    ("skills/interrogate/SKILL.md",
+     "| Reviewer A | `opus` |\n| Reviewer B | `sonnet` |\n",
+     "| Reviewer A | `opus` |\n| Reviewer B | `fable` |\n| Reviewer C | `sonnet` |\n"),
+    ("skills/interrogate/SKILL.md",
      "If the Agent tool rejects a configured entry, run that reviewer on the table default of its family and say so. Families go by prefix: "
-     "`claude-*`, `gpt-*`, and `grok-*`. With no family match, use Reviewer A's default. If it rejects a table default, check the valid slugs in the "
-     "Agent tool's error message, pick the closest equivalent (prefer the highest-reasoning tier of the same family), spawn with it, and open a "
+     "`claude-*` and `grok-*`. With no family match, use Reviewer A's default. If it rejects a table default, check the valid slugs in the "
+     "Agent tool's error message, pick the closest equivalent (prefer the same family and reasoning tier), spawn with it, and open a "
      "separate PR to update the default table.",
      "If the Agent tool rejects a configured entry, run that reviewer on Reviewer A's default and say so. If it rejects a table default "
      "(`fable` is not on every plan), pick the strongest model the Agent tool accepts that is not already on the panel, spawn with it, and say so."),
     ("skills/arena/SKILL.md",
-     "If the Agent tool rejects a configured entry, run that seat on its family's default and say so. Families go by prefix: `claude-*`, `gpt-*`, "
+     "default to one each on `opus` and `sonnet`.", "default to one each on `opus`, `fable`, `sonnet`."),
+    ("skills/arena/SKILL.md",
+     "choose from `opus` and `sonnet`.", "choose from `opus`, `fable`, `sonnet`."),
+    ("skills/architect/SKILL.md",
+     "use `opus` and `sonnet`.", "use `opus`, `fable`, `sonnet`."),
+    ("skills/reflect/SKILL.md",
+     "| Tooling | `reflect tooling` | `sonnet` |", "| Tooling | `reflect tooling` | `fable` |"),
+    ("skills/arena/SKILL.md",
+     "If the Agent tool rejects a configured entry, run that seat on its family's default and say so. Families go by prefix: `claude-*` "
      "and `grok-*`. With no family match, use `opus`. If it rejects a default, use `opus` and say so.",
      "If the Agent tool rejects a configured entry or a default (`fable` is not on every plan), run that seat on `opus` and say so."),
     ("skills/why/SKILL.md",
@@ -190,8 +203,11 @@ PATCHES = [
      "1. Install the `pstack.plugin` file: accept it from the chat card in the Claude app, or add it to Claude Code as a plugin.\n"
      "2. Run [`/pstack:setup-pstack`](../setup-pstack/SKILL.md). It asks for a budget, maps a Claude model to each role, and writes `pstack-models.md` into a `.claude/rules/` directory, which Claude loads every session. It applies to new sessions."),
     ("skills/poteto-help/SKILL.md",
-     "Installing changes nothing until the user invokes a skill. Only `/setup-pstack` and `/poteto-help` load from the user's words.",
-     "Installing changes nothing until the user invokes a skill. Only `/setup-pstack`, `/poteto-help`, `/poteto-mode`, and `/pstack` load from the user's words."),
+     "Installing changes nothing until the user invokes a skill. Only `/setup-pstack` loads from the user's words.",
+     "Installing changes nothing until the user invokes a skill. Only `/setup-pstack`, `/poteto-mode`, `/pstack`, and the bundled `deslop`, "
+     "`control-cli`, and `control-ui` load from the user's words."),
+    ("skills/poteto-help/SKILL.md",
+     "pick a model for each role and a reasoning budget now.", "pick a model for each role and a budget now."),
     ("skills/poteto-help/SKILL.md",
      "A role set to `auto` or `inherit-parent` runs on the chat's model, which saves tokens when the chat runs on Auto or a cheaper model.",
      "A role set to `auto` or `inherit-parent` runs on the chat's model, which saves tokens when the chat runs on a cheaper model."),
@@ -229,8 +245,9 @@ PATCHES = [
      "| A new model choice had no effect | The rule from `/setup-pstack` applies to new chats. Start one. |",
      "| A new model choice had no effect | Rule files load at session start, so the config from `/setup-pstack` applies to new sessions. Start one. |"),
     ("skills/poteto-help/SKILL.md",
-     "| A skill didn't load on its own | Only `/setup-pstack` and `/poteto-help` load from the user's words.",
-     "| A skill didn't load on its own | Only `/setup-pstack`, `/poteto-help`, `/poteto-mode`, and `/pstack` load from the user's words."),
+     "| A skill didn't load on its own | Only `/setup-pstack` loads from the user's words.",
+     "| A skill didn't load on its own | Only `/setup-pstack`, `/poteto-mode`, `/pstack`, and the bundled `deslop`, `control-cli`, and "
+     "`control-ui` load from the user's words."),
     ("skills/poteto-help/SKILL.md",
      "or run them as cloud agents, which each get their own machine.",
      "or run them with `isolation: \"remote\"` where the Agent tool offers it, which gives each its own machine."),
@@ -259,7 +276,7 @@ PATCHES = [
      "commands carry the plugin prefix (`/pstack:poteto-mode`); the optional shortcut skills give you bare `/pstack` and `/poteto-mode`.\n"),
     ("README.md",
      "code delegates (feature, refactoring, bug fix, perf, hillclimb) go to grok, while the hardest changes, prose, and judgment go to opus 5.5. "
-     "the default panel is opus 5.5 / sol / grok.",
+     "the default panel is opus 5.5 / grok.",
      "code delegates (feature, refactoring, bug fix, perf, hillclimb) go to sonnet, while the hardest changes, prose, and judgment go to opus. "
      "the default panel is opus / fable / sonnet."),
     ("README.md",
@@ -292,12 +309,12 @@ PATCHES = [
      "claude code already has a plan mode which works great with pstack."),
     ("README.md",
      "it detects the models you have access to and writes a small always-applied rule mapping each role (code, judgment, the review panels) to a "
-     "model. every skill reads it and falls back to sensible defaults when the rule is absent, so you override only what you want.\n\n"
-     "a rule written before 0.15.3 pins the old default models. delete those role lines, or delete the file, then run `/setup-pstack` again. "
-     "a rerun keeps any role whose model differs from the default.",
+     "model. every skill reads it and falls back to sensible defaults when the rule is absent, so you override only what you want.",
      "it reads the models the agent tool accepts and writes `pstack-models.md`, mapping each role (code, judgment, the review panels) to a "
      "model, as an always-loaded rule in `.claude/rules/`. every skill reads it and falls back to sensible defaults when it is absent, so you override only "
-     "what you want. a rerun keeps the roles you changed by hand."),
+     "what you want."),
+    ("README.md",
+     "a rerun keeps any role whose model differs from the default.", "a rerun keeps the roles you changed by hand."),
     ("README.md",
      "to set it up, point cursor at [`FOR_AGENTS.md`](./automations/benny/FOR_AGENTS.md). setup copies the pack into the target repository at "
      "`.claude/automations/benny/`, enables pstack there for shared skills, and keeps user configuration outside the copied pack.",
@@ -378,12 +395,6 @@ PATCHES = [
      "If the Agent tool rejects a configured entry or a default (`fable` is not on every plan), run that seat on the strongest model the Agent "
      "tool accepts that is not already in the arena, or `opus` when all are, and say so."),
     ("skills/poteto-help/SKILL.md",
-     "Only `/setup-pstack`, `/poteto-help`, `/poteto-mode`, and `/pstack` load from the user's words. The [README]",
-     "Only `/setup-pstack`, `/poteto-help`, `/poteto-mode`, `/pstack`, and the bundled `deslop`, `control-cli`, and `control-ui` load from the user's words. The [README]"),
-    ("skills/poteto-help/SKILL.md",
-     "| A skill didn't load on its own | Only `/setup-pstack`, `/poteto-help`, `/poteto-mode`, and `/pstack` load from the user's words.",
-     "| A skill didn't load on its own | Only `/setup-pstack`, `/poteto-help`, `/poteto-mode`, `/pstack`, and the bundled `deslop`, `control-cli`, and `control-ui` load from the user's words."),
-    ("skills/poteto-help/SKILL.md",
      "The optional `/pstack` and `/poteto-mode` personal shortcut skills drop the prefix.",
      "The optional `/pstack` and `/poteto-mode` personal shortcut skills drop the prefix. Port-only files (`skills/pstack`, `skills/deslop`, "
      "`skills/control-cli`, `skills/control-ui`) and the rewritten `skills/setup-pstack` have no matching upstream copy, so quote those instead of linking."),
@@ -409,8 +420,12 @@ PATCHES = [
      "A role with no line in the rule keeps the skill's default.",
      "A role with no line in the config keeps the skill's default."),
     ("docs/guide/01-setup.md",
-     " A rule written before 0.15.3 pins the old default models, so delete those role lines, or delete the file, then run `/setup-pstack` again.",
-     ""),
+     "The defaults run at `xhigh` reasoning, the same as the `large` budget. `unlimited` lifts each model to its highest tier, up to `max`. "
+     "Opus goes to `max`. Grok tops out at `xhigh`, so it stays there. `medium` and `small` lower the reasoning and spend fewer tokens.",
+     "The defaults match the `unlimited` budget: `opus` for judgment, `sonnet` for code, and `opus, fable, sonnet` review panels. "
+     "`large` drops `fable`. `medium` and `small` move roles to cheaper models and spend fewer tokens."),
+    ("docs/guide/01-setup.md",
+     "pick a smaller reasoning budget or cheaper models.", "pick a smaller budget or cheaper models."),
     ("docs/guide/01-setup.md",
      "You might be wondering what happens if you use Auto. Set a role",
      "You might be wondering how to keep a role on your chat's model. Set a role"),
@@ -426,6 +441,37 @@ PATCHES = [
     ("docs/guide/02-poteto-mode.md",
      "and a Custom Mode keeps `/poteto-mode` in context on every turn.",
      "and `/poteto-mode` stays in context for the rest of the chat once loaded."),
+    ("docs/guide/02-poteto-mode.md",
+     "The cleanest isolation is a [cloud subagent](https://cursor.com/docs/subagents#cloud-subagents). Each one gets its own VM and branch, "
+     "so it can install dependencies, run your app, and record video of the result without touching your machine. Type `/in-cloud` before the "
+     "task, or ask the parent chat to hand work to cloud subagents.",
+     "The cleanest isolation is a remote agent (`isolation: \"remote\"` on the Agent tool, where it is offered). Each one gets its own cloud "
+     "machine and branch, so it can install dependencies, run your app, and record video of the result without touching your machine. Ask the "
+     "parent chat to hand the work to remote agents."),
+    ("docs/guide/07-overnight.md",
+     "an isolated worktree or cloud agent,", "an isolated worktree or remote agent,"),
+    ("docs/guide/07-overnight.md",
+     "that you're about to go offline or restart Cursor.", "that you're about to go offline or restart Claude Code."),
+    ("docs/guide/07-overnight.md",
+     "A [Cursor Project](https://cursor.com/blog/projects) gives one coordinator agent a persistent thread. The coordinator doesn't write code. "
+     "It directs subagents, which run in the cloud by default, so the work continues when your laptop is closed.",
+     "Cursor Projects have no Claude equivalent. The nearest shape is one long-lived coordinator session, such as a Claude Code cloud session, "
+     "with a persistent thread. The coordinator doesn't write code. It directs subagents, run as remote agents (`isolation: \"remote\"`) where "
+     "the Agent tool offers it, so the work continues when your laptop is closed."),
+    ("docs/guide/07-overnight.md",
+     "- Give each body of work its own Project,", "- Give each body of work its own coordinator session,"),
+    ("docs/guide/07-overnight.md",
+     "- Drag related chats into the Project, finished ones included. They become context for every agent in it.",
+     "- Have the coordinator `/recall` related chats, finished ones included. They become context for every agent it briefs."),
+    ("docs/guide/07-overnight.md",
+     "One prompt can carry a whole Project,", "One prompt can carry a whole coordinator session,"),
+    ("docs/guide/07-overnight.md",
+     "and name the target repository to set it up.",
+     "and name the target repository to set it up. The pack runs on Cursor Automations, so this port ships it for reference. "
+     "[`CLAUDE-PORT.md`](../../automations/benny/CLAUDE-PORT.md) says what porting it to Claude scheduled tasks takes."),
+    ("docs/guide/10-recipes-and-pitfalls.md",
+     "Run them as cloud agents, or say \"own worktree per attempt\".",
+     "Run them as remote agents, or say \"own worktree per attempt\"."),
     ("docs/guide/07-overnight.md",
      "`/loop` is Cursor's built-in wake mechanism, not a pstack skill.",
      "`/loop` is Claude Code's built-in wake mechanism, not a pstack skill."),
