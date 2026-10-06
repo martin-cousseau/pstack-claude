@@ -1,6 +1,6 @@
 # pstack
 
-> **Claude port.** This is [poteto's pstack](https://github.com/cursor/plugins/tree/main/pstack) (Cursor plugin v0.15.10, MIT, by Lauren Tan) translated to Claude. Every skill, playbook, principle, reference, script, and subagent is here, rewired from Cursor's tools to Claude's. The original README follows the port notes.
+> **Claude port.** This is [poteto's pstack](https://github.com/cursor/plugins/tree/main/pstack) (Cursor plugin v0.15.15, MIT, by Lauren Tan) translated to Claude. Every skill, playbook, principle, reference, script, and subagent is here, rewired from Cursor's tools to Claude's. The original README follows the port notes.
 
 ## using it in claude
 
@@ -142,7 +142,7 @@ to keep [`/poteto-mode`](./skills/poteto-mode/SKILL.md) on across turns, just in
 | skill | use it when |
 |---|---|
 | [`/poteto-mode`](./skills/poteto-mode/SKILL.md) | default entry point for any non-trivial task. |
-| [`/poteto-help`](./skills/poteto-help/SKILL.md) | you're new to pstack, or unsure which skill, playbook, or principle fits. finds out what you're trying to do, answers that part, and hands you a prompt to type. also loads on its own when you ask how to use pstack. |
+| [`/poteto-help`](./skills/poteto-help/SKILL.md) | you're new to pstack, or unsure which skill, playbook, or principle fits. finds out what you're trying to do, answers that part, and hands you a prompt to type. runs only when you type `/poteto-help`. |
 | [`/how`](./skills/how/SKILL.md) | you want a walkthrough of how a subsystem works. |
 | [`/why`](./skills/why/SKILL.md) | you want to know why something was built this way. discovers available MCPs at run time and queries each evidence category in parallel (source control, issue tracker, long-form docs, real-time chat, infra observability, error tracking, analytics warehouse). |
 | [`/recall`](./skills/recall/SKILL.md) | you're starting or resuming work and want your recent context on a topic rebuilt from your own chat history and the shared record, handed back as a tight current-state brief. |
@@ -150,7 +150,7 @@ to keep [`/poteto-mode`](./skills/poteto-mode/SKILL.md) on across turns, just in
 | [`/architect`](./skills/architect/SKILL.md) | you're about to write code that crosses a function boundary and want the caller's usage, types, and module shape settled first. |
 | [`/arena`](./skills/arena/SKILL.md) | you want N parallel attempts at the same thing, then to grab the best parts of each. |
 | [`/swarm`](./skills/swarm/SKILL.md) | you want N parallel workers across different slices or races, then one aggregated report. |
-| [`/interrogate`](./skills/interrogate/SKILL.md) | you have a diff and want several different models to try to break it, including a strict code-quality lens. |
+| [`/interrogate`](./skills/interrogate/SKILL.md) | you have a diff and want different models to try to break it, including a strict code-quality lens. |
 | [`/automate-me`](./skills/automate-me/SKILL.md) | you want your own `-mode` skill, drafted from how you've actually worked. |
 | [`/make-bot-ui`](./skills/make-bot-ui/SKILL.md) | cursor-only, kept for reference: a page whose buttons wake a cursor Grok Bot over a webhook. |
 | [`/setup-pstack`](./skills/setup-pstack/SKILL.md) | you want to pick which models pstack uses per role. writes an always-loaded `pstack-models.md` rule. |
@@ -278,7 +278,9 @@ claude code already has a plan mode which works great with pstack. but personall
 
 type [`/automate-me`](./skills/automate-me/SKILL.md). it mines your recent transcripts, drafts a `<your-name>-mode` skill from how you've actually worked, and routes through pstack underneath. you keep pstack as the base and end up with your own routing skill alongside `poteto-mode`.
 
-models are configurable too. type [`/setup-pstack`](./skills/setup-pstack/SKILL.md). it reads the models the agent tool accepts and writes `pstack-models.md`, mapping each role (code, judgment, the review panels) to a model, as an always-loaded rule in `.claude/rules/`. every skill reads it and falls back to sensible defaults when it is absent, so you override only what you want. a rerun keeps the roles you changed by hand.
+models are configurable too. type [`/setup-pstack`](./skills/setup-pstack/SKILL.md). it reads the models the agent tool accepts and writes `pstack-models.md`, mapping each role (code, judgment, the review panels) to a model, as an always-loaded rule in `.claude/rules/`. every skill reads it and falls back to sensible defaults when it is absent, so you override only what you want.
+
+when a default changes, a rule written before the change still pins the old default. delete those role lines, or delete the file, then run `/setup-pstack` again. a rerun keeps the roles you changed by hand.
 
 ## automations
 

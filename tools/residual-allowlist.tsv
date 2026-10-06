@@ -13,3 +13,5 @@ skills/typescript-best-practices/references/patterns.md	readonly __brand
 skills/poteto-mode/playbooks/opening-a-pr.md	Branch from trunk only for independent work
 skills/poteto-mode/playbooks/worktree-cleanup.md	if Cursor is also installed
 skills/poteto-mode/playbooks/multi-phase-plan.md	<Task as a verb phrase>
+docs/guide/07-overnight.md	Cursor Projects have no Claude equivalent
+docs/guide/07-overnight.md	The pack runs on Cursor Automations

@@ -36,6 +36,7 @@ REWRITES = [
     ("If the rule or the line is missing", "If the config or the line is missing"),
     # Model slugs -> Claude Agent tool model aliases.
     ("claude-opus-5-5-max", "opus"),
+    ("claude-opus-5-5-xhigh", "opus"),
     ("claude-opus-5-5-medium", "sonnet"),
     ("gpt-5.6-sol-max", "fable"),
     ("grok-4.7-xhigh-fast", "sonnet"),
