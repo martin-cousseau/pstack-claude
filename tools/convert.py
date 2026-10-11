@@ -84,6 +84,7 @@ REWRITES = [
     ("- `readonly`: `true`", "- read-only: append \"Do not edit, write, or commit anything.\" to its prompt"),
     ("Cursor cloud agent", 'remote agent (`isolation: "remote"`, else `isolation: "worktree"`)'),
     (" Readonly strips MCPs.", ""),
+    (", and readonly strips MCPs.", "."),
     ("- Tool calls (Shell, Grep, MCP, etc.) that match a skill's documented commands",
      "- `Skill` tool calls, and user turns that invoke a skill as a slash command (`/pstack:<name>`)\n- Tool calls (Bash, Grep, MCP, etc.) that match a skill's documented commands"),
     ("`node pstack/skills/", "`node <pstack root>/skills/"),

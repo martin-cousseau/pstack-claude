@@ -94,15 +94,19 @@ PATCHES = [
      "`<session-id>/subagents/`. Every line is one JSON event: a message, a tool call, or a tool result. If the directory is missing, as in a fresh "
      "cloud session that keeps no history, say so and build the brief from the shared record and live state."),
     ("skills/reflect/SKILL.md",
-     "The system prompt names the active workspace's `agent-transcripts/` directory. Use that path. Do not glob across `~/.cursor/projects/*/`.",
-     "Claude Code keeps the active workspace's transcripts in " + TX_DIR + ". Use that path. Do not glob across `~/.claude/projects/*/`."),
+     "find this conversation's transcript in the `agent-transcripts/` directory the system prompt names. Do not glob across `~/.cursor/projects/*/`.",
+     "find this conversation's transcript. Claude Code keeps the active workspace's transcripts in " + TX_DIR + ". "
+     "Do not glob across `~/.claude/projects/*/`."),
     ("skills/reflect/SKILL.md",
      "ls -t <agent-transcripts>/*.jsonl <agent-transcripts>/*/*.jsonl <agent-transcripts>/*/subagents/*.jsonl 2>/dev/null | head -10",
      "ls -t <transcripts>/*.jsonl <transcripts>/*/subagents/*.jsonl 2>/dev/null | head -10"),
     ("skills/reflect/SKILL.md",
-     "Three transcript layouts: legacy flat (`<id>.jsonl`), current nested (`<id>/<id>.jsonl`), and subagent (`<parent>/subagents/<child>.jsonl`).",
-     "Two transcript layouts: the session (`<session-id>.jsonl`) and its subagents (`<session-id>/subagents/<agent-id>.jsonl`). "
-     "If the directory is missing (a fresh cloud session), digest the current conversation instead and say so."),
+     "That covers the legacy flat (`<id>.jsonl`), current nested (`<id>/<id>.jsonl`), and subagent (`<parent>/subagents/<child>.jsonl`) layouts. "
+     "For each candidate, read the first JSONL line. Take the file whose `message.content[0].text` contains the conversation's opening user prompt.",
+     "That covers the session (`<session-id>.jsonl`) and its subagents (`<session-id>/subagents/<agent-id>.jsonl`). If the directory is missing "
+     "(a fresh cloud session), digest the current conversation instead and say so. For each candidate, find the first line whose `type` is `user`. "
+     "Take the file whose `message.content` contains the conversation's opening user prompt. That field is a string, or, when it is an array, "
+     "the `text` of its first text block."),
     ("skills/poteto-mode/playbooks/session-pickup.md",
      "A local transcript under the active workspace's `agent-transcripts/` directory (the system prompt names the path. Do not glob across "
      "`~/.cursor/projects/*/`, that crosses workspace boundaries and reads private chats from unrelated projects), a cloud-agent URL, or a pushed branch.",
@@ -131,17 +135,23 @@ PATCHES = [
 
     # ---- model panels --------------------------------------------------------
     ("skills/interrogate/SKILL.md",
-     "extending or shrinking the Reviewer A/B labels below", "extending or shrinking the Reviewer A/B/C labels below"),
-    ("skills/interrogate/SKILL.md",
      "| Reviewer A | `opus` |\n| Reviewer B | `sonnet` |\n",
      "| Reviewer A | `opus` |\n| Reviewer B | `fable` |\n| Reviewer C | `sonnet` |\n"),
     ("skills/interrogate/SKILL.md",
-     "If the Agent tool rejects a configured entry, run that reviewer on the table default of its family and say so. Families go by prefix: "
-     "`claude-*` and `grok-*`. With no family match, use Reviewer A's default. If it rejects a table default, check the valid slugs in the "
-     "Agent tool's error message, pick the closest equivalent (prefer the same family and reasoning tier), spawn with it, and open a "
-     "separate PR to update the default table.",
+     "If the Agent tool rejects a configured entry, run that reviewer on its family's table default and say so. Families go by prefix: "
+     "`claude-*` and `grok-*`. With no family match, use Reviewer A's default. If it rejects a table default, spawn with the closest "
+     "equivalent from the valid slugs in its error message (prefer the same family and reasoning tier), and open a separate PR to update "
+     "the default table.",
      "If the Agent tool rejects a configured entry, run that reviewer on Reviewer A's default and say so. If it rejects a table default "
      "(`fable` is not on every plan), pick the strongest model the Agent tool accepts that is not already on the panel, spawn with it, and say so."),
+    ("skills/interrogate/SKILL.md",
+     "Each reviewer gets `subagent_type: general-purpose`, `readonly: true`, and `model` set to",
+     "Each reviewer gets `subagent_type: general-purpose`, \"Do not edit, write, or commit anything.\" appended to its prompt (Claude has no "
+     "read-only flag), and `model` set to"),
+    ("skills/how/SKILL.md",
+     "Every spawn is a Agent subagent with `subagent_type: general-purpose` and `readonly: true`.",
+     "Every spawn is an Agent subagent with `subagent_type: general-purpose` and \"Do not edit, write, or commit anything.\" appended to its "
+     "prompt (Claude has no read-only flag)."),
     ("skills/arena/SKILL.md",
      "default to one each on `opus` and `sonnet`.", "default to one each on `opus`, `fable`, `sonnet`."),
     ("skills/arena/SKILL.md",
@@ -160,13 +170,10 @@ PATCHES = [
      "Before spawning investigators, list the MCP servers available in this session. Their tools are named `mcp__<server>__<tool>`. "
      "Deferred tools show up by name only, so search with ToolSearch when it exists. `gh` and `git` cover source control without an MCP."),
     ("skills/why/SKILL.md",
-     "- `readonly`: `false` (agent mode). **Do not use readonly/Ask mode.** It strips MCP access, which disables MCP-backed investigators entirely. "
-     "Investigators still shouldn't write anything.",
-     "- full tool access: `general-purpose`, never the read-only `Explore` type, so MCP tools stay reachable. Investigators still shouldn't write anything."),
-    ("skills/why/SKILL.md",
-     "- `readonly`: `false` (agent mode). The synthesizer's quality check spot-verifies citations, which can require MCP access. Readonly/Ask mode "
-     "strips MCPs and defeats that.",
-     "- full tool access: `general-purpose`. The synthesizer's quality check spot-verifies citations, which can require MCP access."),
+     "Every spawn is `general-purpose` with `readonly: false` (agent mode). **Do not use readonly/Ask mode.** It strips MCP access, which "
+     "disables the MCP-backed investigators and the synthesizer's citation spot-checks.",
+     "Every spawn is `general-purpose` with full tool access. **Never use the read-only `Explore` type.** It cannot reach MCP tools, which "
+     "disables the MCP-backed investigators and the synthesizer's citation spot-checks."),
     ("skills/swarm/SKILL.md",
      "Use no `isolation` (or `isolation: \"worktree\"` when it writes files) only when the worker needs access to something on the user's",
      "Run it in this checkout (with `isolation: \"worktree\"` when it writes files) only when the worker needs access to something on the user's"),
@@ -334,10 +341,6 @@ PATCHES = [
      "- Durable working state (orchestrate stores, plan files) goes under `~/.claude/pstack/<project-slug>/` unless the operator names a path. "
      "A cloud session's home directory does not persist, so there keep what must survive in the repo or on a pushed branch, and say so.\n"),
     ("skills/poteto-mode/SKILL.md", "Open a todolist whose first items", "Open a task list (TaskCreate, or TodoWrite) whose first items"),
-    ("skills/reflect/SKILL.md",
-     "For each candidate, read the first JSONL line and check that `message.content[0].text` contains the conversation's opening user prompt.",
-     "For each candidate, find the first line whose `type` is `user` and check that its `message.content` contains the conversation's opening "
-     "user prompt. That field is a string, or, when it is an array, the `text` of its first text block."),
     ("skills/poteto-mode/playbooks/orchestrate.md",
      "Create `orchestrate/<project-slug>/` in the current agent's store (path in the system prompt).",
      "Create `~/.claude/pstack/<project-slug>/orchestrate/`, the pstack store poteto-mode names, and pass it to every `orch` call as `ORCH_STORE`."),
