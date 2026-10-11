@@ -2,6 +2,23 @@
 
 Newest first. The Claude agent that syncs this repo adds one entry per landed update.
 
+## 0.15.17-claude.1 (2026-10-11)
+
+Synced `cursor/plugins@df58112..9d76bca` (pstack 0.15.15 to 0.15.17).
+
+Upstream:
+
+- feat(pstack): add /ketchup skill (#539)
+- refactor(pstack): distill skill prompts to cut tokens (#538)
+
+Port changes:
+
+- `/ketchup` ships as is. It has no Cursor-specific wording.
+- Seven patches drifted under upstream's rewording of `reflect`, `interrogate`, and `why`. Each now targets the new text with the same Claude translation: transcripts under `~/.claude/projects/<slug>/`, the `type: user` first-line check, no model families in the `interrogate` fallback, and full tool access instead of agent mode in `why`.
+- The `interrogate` "A/B/C labels" patch is gone. Upstream now labels reviewers to match the entry count.
+- Upstream's new inline `readonly: true` in `how` and `interrogate` becomes the "Do not edit, write, or commit anything." prompt line.
+- New rewrite: ", and readonly strips MCPs." is dropped, as the existing " Readonly strips MCPs." rewrite already does.
+
 ## 0.15.15-claude.1 (2026-10-06)
 
 Synced `cursor/plugins@4e5b1cf..df58112` (pstack 0.15.10 to 0.15.15).
