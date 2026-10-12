@@ -44,6 +44,7 @@ REWRITES = [
     # Subagent types.
     ('subagent_type: "poteto-agent"', 'subagent_type: "pstack:poteto-agent"'),
     ('subagent_type: "Comment Sicko"', 'subagent_type: "pstack:comment-sicko"'),
+    ('subagent_type: "comment-sicko"', 'subagent_type: "pstack:comment-sicko"'),
     ("generalPurpose", "general-purpose"),
     ("agent mode (`readonly: false`)", "full tool access (not the read-only `Explore` type)"),
     ('`environment: "cloud"`', '`isolation: "remote"` (fall back to `isolation: "worktree"` when the Agent tool lacks the remote option or refuses the call)'),
@@ -53,6 +54,7 @@ REWRITES = [
     (r"\bTask tool\b", "Agent tool", "re"),
     (r"\bTask calls?\b", lambda m: m.group(0).replace("Task", "Agent"), "re"),
     (r"\bTask subagent", "Agent subagent", "re"),
+    (r"\bTask spawn", "Agent spawn", "re"),
     (r"\bTask prompts\b", "Agent prompts", "re"),
     ("Task `model`", "Agent `model`"),
     # Structured questions.

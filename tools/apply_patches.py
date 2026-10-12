@@ -77,7 +77,6 @@ PATCHES = [
      "Load the pstack `poteto-mode` skill in full before doing any work, including its inline Principles index. "
      "Invoke the Skill tool with `pstack:poteto-mode`, or Read `${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md`. "
      "Navigate to a leaf `principle-*` skill (a sibling directory under `skills/`) whenever you apply that principle."),
-    ("agents/comment-sicko.md", "name: Comment Sicko\n", "name: comment-sicko\n"),
     ("agents/comment-sicko.md",
      "description: A deranged comment-hater that savors deletion and condemns workaround code.",
      "description: A deranged comment-hater that savors deletion and condemns workaround code. Spawned by the pstack /no-comments skill to review comments in a scoped diff."),
@@ -499,7 +498,7 @@ def main() -> None:
             continue
         path.write_text(text.replace(old, new, 1))
 
-    (OUT / ".claude-plugin" / "plugin.json").write_text(json.dumps({
+    port_manifest = {
         "name": "pstack",
         "version": f"{UPSTREAM_VERSION}-claude.{PORT_REV}",
         "description": "poteto's pstack, ported from Cursor to Claude. if you want to go fast, go deep first: rigorous agent workflows "
@@ -509,7 +508,13 @@ def main() -> None:
         "repository": "https://github.com/cursor/plugins",
         "license": "MIT",
         "keywords": ["pstack", "poteto-mode", "workflow", "principles", "subagents", "code-review", "unslop"],
-    }, indent=2) + "\n")
+    }
+    (OUT / ".claude-plugin" / "plugin.json").write_text(json.dumps(port_manifest, indent=2) + "\n")
+    # Upstream's Agent Plugins v1 root manifest stays, with the port's identity and version so it never
+    # disagrees with .claude-plugin/plugin.json. Upstream's $schema and any field the port does not set are kept.
+    root_manifest = OUT / "plugin.json"
+    if root_manifest.exists():
+        root_manifest.write_text(json.dumps({**json.loads(root_manifest.read_text()), **port_manifest}, indent=2) + "\n")
     (OUT / "NOTICE.md").write_text(
         "# Notice\n\n"
         "pstack is by Lauren Tan (poteto), MIT licensed. See `LICENSE`. Source: https://github.com/cursor/plugins/tree/main/pstack "

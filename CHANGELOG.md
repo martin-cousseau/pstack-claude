@@ -2,12 +2,21 @@
 
 Newest first. The Claude agent that syncs this repo adds one entry per landed update.
 
-## 0.15.17-claude.1 (2026-10-11)
+## 0.15.19-claude.1 (2026-10-12)
 
-Synced `cursor/plugins@df58112..9d76bca` (pstack 0.15.15 to 0.15.17).
+Synced `cursor/plugins@df58112..e5a02f8` (pstack 0.15.15 to 0.15.19). This includes the 0.15.17 sync from #2, which never reached `main`.
 
 Upstream:
 
+- feat(pstack): add Agent Plugins v1 root manifest (#576)
+- fix(pstack): make the /poteto-mode chat the runner, poteto-agent a delegate (#575)
+- fix(pstack): worktree-audit checks MERGED against the default branch, not origin/main (#574)
+- fix(pstack): drop "Must always apply." from unslop description (#572)
+- fix(watch-pr): paginate review threads instead of reading only the first 100 (#484)
+- fix(pstack): respect fenced code blocks in plan checks (#536)
+- fix(pstack): rename Comment Sicko agent id so Grok can spawn it (#486)
+- refactor(pstack): cut unneeded sections from seven skills (#571)
+- feat(pstack): show /ketchup decisions as before/after visuals (#570)
 - feat(pstack): add /ketchup skill (#539)
 - refactor(pstack): distill skill prompts to cut tokens (#538)
 
@@ -18,6 +27,10 @@ Port changes:
 - The `interrogate` "A/B/C labels" patch is gone. Upstream now labels reviewers to match the entry count.
 - Upstream's new inline `readonly: true` in `how` and `interrogate` becomes the "Do not edit, write, or commit anything." prompt line.
 - New rewrite: ", and readonly strips MCPs." is dropped, as the existing " Readonly strips MCPs." rewrite already does.
+- Upstream renamed the Comment Sicko agent to `comment-sicko`, so the port's frontmatter rename patch is gone. New rewrite: `subagent_type: "comment-sicko"` becomes `pstack:comment-sicko`.
+- New rewrite: "Task spawn" becomes "Agent spawn" (new in `poteto-agent`).
+- Upstream's new root `plugin.json` (Agent Plugins v1) ships with the port's name, version, and description, so it matches `.claude-plugin/plugin.json`.
+- `worktree-audit.sh` now prints a `# base:` line before its header. The verify check skips it. The Claude transcript blocks still apply unchanged.
 
 ## 0.15.15-claude.1 (2026-10-06)
 
