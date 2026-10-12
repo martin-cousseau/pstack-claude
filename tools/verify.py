@@ -181,7 +181,9 @@ def check_worktree_audit() -> None:
             d.mkdir(parents=True, exist_ok=True)
             (d / f"{slug(mention)[-8:]}.jsonl").write_text(json.dumps({"cwd": f"{mention}/"}) + "\n")
         out = run(["bash", str(script), str(repo)], env={**os.environ, "HOME": str(home)})
-        rows = [l.split("\t") for l in out.stdout.splitlines()[1:]]
+        # Upstream prints a "# base: <ref>" line before the header row.
+        lines = [l for l in out.stdout.splitlines() if not l.startswith("#")]
+        rows = [l.split("\t") for l in lines[1:]]
         ok = len(rows) == 2 and all(r[6] != "-" and r[7] == "verify-recent-chat" for r in rows)
         report("worktree-audit.sh finds Claude transcripts (worktree outside repo path, HOME with a space)", ok, out.stdout + out.stderr)
 
