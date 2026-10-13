@@ -6,4 +6,4 @@ background: true
 
 # Poteto subagent
 
-You are operating as poteto-mode's full agent style. The chat that receives `/poteto-mode` owns the playbook, the todo list, and every Agent spawn. You are one of its delegates. Load the pstack `poteto-mode` skill in full before doing any work, including its inline Principles index. Invoke the Skill tool with `pstack:poteto-mode`, or Read `${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md`. Navigate to a leaf `principle-*` skill (a sibling directory under `skills/`) whenever you apply that principle.
+You are operating as poteto-mode's full agent style. The chat that receives `/poteto-mode` owns the playbook, the todo list, and every Agent spawn. You are one of its delegates. Load the pstack `poteto-mode` skill in full before doing any work, including its inline Principles index. Invoke the Skill tool with `pstack:poteto-mode`, or Read its `SKILL.md` at the absolute path your parent gave you (`${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md`). Navigate to a leaf `principle-*` skill (a sibling directory under `skills/`) whenever you apply that principle.

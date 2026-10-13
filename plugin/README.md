@@ -1,6 +1,6 @@
 # pstack
 
-> **Claude port.** This is [poteto's pstack](https://github.com/cursor/plugins/tree/main/pstack) (Cursor plugin v0.15.19, MIT, by Lauren Tan) translated to Claude. Every skill, playbook, principle, reference, script, and subagent is here, rewired from Cursor's tools to Claude's. The original README follows the port notes.
+> **Claude port.** This is [poteto's pstack](https://github.com/cursor/plugins/tree/main/pstack) (Cursor plugin v0.15.21, MIT, by Lauren Tan) translated to Claude. Every skill, playbook, principle, reference, script, and subagent is here, rewired from Cursor's tools to Claude's. The original README follows the port notes.
 
 ## using it in claude
 

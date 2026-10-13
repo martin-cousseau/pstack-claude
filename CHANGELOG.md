@@ -2,12 +2,16 @@
 
 Newest first. The Claude agent that syncs this repo adds one entry per landed update.
 
-## 0.15.19-claude.1 (2026-10-12)
+## 0.15.21-claude.1 (2026-10-13)
 
-Synced `cursor/plugins@df58112..e5a02f8` (pstack 0.15.15 to 0.15.19). This includes the 0.15.17 sync from #2, which never reached `main`.
+Synced `cursor/plugins@df58112..1dcc2ba` (pstack 0.15.15 to 0.15.21). This includes the 0.15.17 and 0.15.19 syncs from #2 and #3, which never reached `main`.
 
 Upstream:
 
+- chore(pstack): bump to 0.15.21 (#584)
+- fix(pstack): tell agents where bundled leaf skills live (#577)
+- chore(pstack): bump to 0.15.20 (#581)
+- fix(pstack): create-verification-skill readiness means the app is usable (#573)
 - feat(pstack): add Agent Plugins v1 root manifest (#576)
 - fix(pstack): make the /poteto-mode chat the runner, poteto-agent a delegate (#575)
 - fix(pstack): worktree-audit checks MERGED against the default branch, not origin/main (#574)
@@ -31,6 +35,7 @@ Port changes:
 - New rewrite: "Task spawn" becomes "Agent spawn" (new in `poteto-agent`).
 - Upstream's new root `plugin.json` (Agent Plugins v1) ships with the port's name, version, and description, so it matches `.claude-plugin/plugin.json`.
 - `worktree-audit.sh` now prints a `# base:` line before its header. The verify check skips it. The Claude transcript blocks still apply unchanged.
+- The `poteto-agent` load patch now keeps upstream's new "Use the absolute path your parent gave you": it loads `pstack:poteto-mode` through the Skill tool, or Reads the `SKILL.md` at that path (`${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md`). The new `poteto-mode` line about `../<name>/SKILL.md` ships as is, because the layout is the same under `plugin/skills/`.
 
 ## 0.15.15-claude.1 (2026-10-06)
 

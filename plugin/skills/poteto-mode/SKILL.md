@@ -16,6 +16,8 @@ description: poteto's agent style for concise, detailed responses, deliberate su
 - The Agent tool is named `Task` in some Claude Code versions. Treat the two names as one tool.
 - Durable working state (orchestrate stores, plan files) goes under `~/.claude/pstack/<project-slug>/` unless the operator names a path. A cloud session's home directory does not persist, so there keep what must survive in the repo or on a pushed branch, and say so.
 
+Bundled skills live at `../<name>/SKILL.md` from this file, so put this file's absolute path in every `poteto-agent` prompt.
+
 ## Non-negotiables
 
 The Principles section below grounds every trigger. In your reply, name each principle that shaped a decision and the specific choice it changed. Cite only principles whose leaf SKILL.md you read this session.

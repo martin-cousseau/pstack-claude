@@ -73,9 +73,11 @@ PATCHES = [
     # ---- agents --------------------------------------------------------------
     ("agents/poteto-agent.md",
      "Read the `poteto-mode` skill's `SKILL.md` in full before doing any work, including its inline Principles index. "
+     "Use the absolute path your parent gave you. "
      "Navigate to a leaf `principle-*` skill whenever you apply that principle.",
      "Load the pstack `poteto-mode` skill in full before doing any work, including its inline Principles index. "
-     "Invoke the Skill tool with `pstack:poteto-mode`, or Read `${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md`. "
+     "Invoke the Skill tool with `pstack:poteto-mode`, or Read its `SKILL.md` at the absolute path your parent gave you "
+     "(`${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md`). "
      "Navigate to a leaf `principle-*` skill (a sibling directory under `skills/`) whenever you apply that principle."),
     ("agents/comment-sicko.md",
      "description: A deranged comment-hater that savors deletion and condemns workaround code.",
