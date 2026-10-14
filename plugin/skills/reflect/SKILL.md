@@ -26,7 +26,7 @@ That covers the session (`<session-id>.jsonl`) and its subagents (`<session-id>/
 
 One message, three `Agent` calls, `subagent_type: general-purpose`, full tool access (not the read-only `Explore` type). Reviewers need MCP access to look up the tickets, chat threads, and observability traces the transcript references.
 
-Each reviewer and the synthesizer name a role line in the `pstack-models.md` (the project's `.claude/rules/pstack-models.md`, else `~/.claude/rules/pstack-models.md`) config and a default. Set `model` to that line's value, or to the default if the config or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a slug, use the default and say so. If it rejects the default, use `opus` and say so.
+Each reviewer and the synthesizer name a role line in the `pstack-models.md` (the project's `.claude/rules/pstack-models.md`, else `~/.claude/rules/pstack-models.md`) config and a default. Set `model` to that line's value, or to the default if the config or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a slug, use the default and say so. If it rejects the default, use `opus` and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
 
 | Lens | Role line | Default `model` | Prompt template |
 |---|---|---|---|

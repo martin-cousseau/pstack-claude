@@ -15,3 +15,4 @@ skills/poteto-mode/playbooks/worktree-cleanup.md	if Cursor is also installed
 skills/poteto-mode/playbooks/multi-phase-plan.md	<Task as a verb phrase>
 docs/guide/07-overnight.md	Cursor Projects have no Claude equivalent
 docs/guide/07-overnight.md	The pack runs on Cursor Automations
+skills/poteto-mode/playbooks/autopilot-stack.md	its owner branches from that item's branch, not from trunk

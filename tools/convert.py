@@ -57,6 +57,8 @@ REWRITES = [
     (r"\bTask spawn", "Agent spawn", "re"),
     (r"\bTask prompts\b", "Agent prompts", "re"),
     ("Task `model`", "Agent `model`"),
+    # Per-spawn reasoning level and speed -> Agent tool effort (no per-subagent fast mode in Claude).
+    ("Pick each subagent's reasoning level and fast or standard speed for the job,", "Pick each subagent's effort for the job,"),
     # Structured questions.
     ("AskQuestion", "AskUserQuestion"),
     # Skill and plugin locations.

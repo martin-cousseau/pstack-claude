@@ -49,8 +49,8 @@ PATCHES = [
      "- There is no Custom Mode. Once loaded, this file stays in the conversation and keeps applying to later turns. "
      "\"New task\" rematches a playbook. The user opts out by saying so.\n\n"),
     ("skills/poteto-mode/SKILL.md",
-     "`/poteto-mode` and `poteto-agent` route through the same wrapper.",
-     "`/poteto-mode` and `poteto-agent` route through the same wrapper. If the Agent tool does not list `pstack:poteto-agent`, use `general-purpose` "
+     "Never spawn a `poteto-agent` to run the playbook itself.",
+     "Never spawn a `poteto-agent` to run the playbook itself. If the Agent tool does not list `pstack:poteto-agent`, use `general-purpose` "
      "and open the brief with \"Before any work, read `${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md` in full, including its Principles index.\" with the path expanded."),
     ("skills/poteto-mode/SKILL.md",
      "`run_in_background: true`, agent mode (readonly strips MCP),",
@@ -69,15 +69,38 @@ PATCHES = [
      "Prose and judgment read `judgment and prose`.",
      "Prose and judgment read `judgment and prose`. If a subagent cannot spawn subagents of its own in this harness, "
      "the parent runs that fan-out itself and hands the results down."),
+    ("skills/poteto-mode/SKILL.md",
+     "**Match the model to the job.** Before each spawn, start from the role's line or default and pick the reasoning level and speed the job needs. "
+     "The `/setup-pstack` budget sets each role's starting level, xhigh by default. Raise it one step, up to max, for the hardest or subtlest work. "
+     "Lower it one step for judgment and two or more steps for routine work. Use fast mode only when the job is urgent, meaning CI or trunk is red "
+     "or a person is blocked on the result right now. Otherwise use standard speed, the same slug without `-fast`. Verification is the exception "
+     "and stays on the `swarm workers` model and speed (`sonnet` by default). Change only the effort level and whether the slug is fast, and keep "
+     "the family the role names, so a diverse panel stays diverse. If the family has no slug at that level and speed, use its nearest slug. "
+     "A role on `auto` or `inherit-parent` stays on the parent model. If the Agent tool rejects the adjusted slug, do not try another adjusted slug. "
+     "Use the role's line or default and say so.",
+     "**Match the effort to the job.** Before each spawn, start from the role's line or default and pick the effort the job needs, through the "
+     "Agent tool's `effort` parameter (`low`, `medium`, `high`, `xhigh`, `max`). Every role starts at `xhigh`. The `/setup-pstack` budget picks "
+     "each role's model, not its effort. Raise it one step, up to `max`, for the hardest or subtlest work. Lower it one step for judgment and two "
+     "or more steps for routine work. Verification is the exception and stays on the `swarm workers` model at `xhigh` (`sonnet` by default). "
+     "Change only the effort, never the model the role names, so a diverse panel stays diverse. A role on `auto` or `inherit-parent` stays on the "
+     "parent model. If the Agent tool has no `effort` parameter or rejects the level, spawn without `effort` and say so. Claude has no per-subagent "
+     "fast mode, so every subagent runs at standard speed."),
 
     # ---- agents --------------------------------------------------------------
     ("agents/poteto-agent.md",
      "Read the `poteto-mode` skill's `SKILL.md` in full before doing any work, including its inline Principles index. "
      "Use the absolute path your parent gave you. "
+     "With no path, before any other work, search `~/.claude/plugins/` for a file whose path ends in `skills/poteto-mode/SKILL.md`. "
+     "If more than one file matches, use the copy whose `.cursor-plugin/plugin.json` has the highest `version`. "
+     "Your skill catalog hides this skill, so a missing catalog entry does not mean pstack is absent. "
+     "If no such file exists, stop and tell your parent. "
      "Navigate to a leaf `principle-*` skill whenever you apply that principle.",
      "Load the pstack `poteto-mode` skill in full before doing any work, including its inline Principles index. "
      "Invoke the Skill tool with `pstack:poteto-mode`, or Read its `SKILL.md` at the absolute path your parent gave you "
      "(`${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md`). "
+     "With neither, before any other work, search `~/.claude/plugins/` for a file whose path ends in `skills/poteto-mode/SKILL.md`. "
+     "If more than one file matches, use the copy whose `.claude-plugin/plugin.json` has the highest `version`. "
+     "If no such file exists, stop and tell your parent. "
      "Navigate to a leaf `principle-*` skill (a sibling directory under `skills/`) whenever you apply that principle."),
     ("agents/comment-sicko.md",
      "description: A deranged comment-hater that savors deletion and condemns workaround code.",
@@ -140,7 +163,8 @@ PATCHES = [
      "| Reviewer A | `opus` |\n| Reviewer B | `fable` |\n| Reviewer C | `sonnet` |\n"),
     ("skills/interrogate/SKILL.md",
      "If the Agent tool rejects a configured entry, run that reviewer on its family's table default and say so. Families go by prefix: "
-     "`claude-*` and `grok-*`. With no family match, use Reviewer A's default. If it rejects a table default, spawn with the closest "
+     "`claude-*`, and `grok-*` with `cursor-grok-*` and `composer-*`. A refused `composer-*` entry runs on Reviewer B's default. "
+     "With no family match, use Reviewer A's default. If it rejects a table default, spawn with the closest "
      "equivalent from the valid slugs in its error message (prefer the same family and reasoning tier), and open a separate PR to update "
      "the default table.",
      "If the Agent tool rejects a configured entry, run that reviewer on Reviewer A's default and say so. If it rejects a table default "
@@ -162,8 +186,9 @@ PATCHES = [
     ("skills/reflect/SKILL.md",
      "| Tooling | `reflect tooling` | `sonnet` |", "| Tooling | `reflect tooling` | `fable` |"),
     ("skills/arena/SKILL.md",
-     "If the Agent tool rejects a configured entry, run that seat on its family's default and say so. Families go by prefix: `claude-*` "
-     "and `grok-*`. With no family match, use `opus`. If it rejects a default, use `opus` and say so.",
+     "If the Agent tool rejects a configured entry, run that seat on its family's default and say so. Families go by prefix: `claude-*`, "
+     "and `grok-*` with `cursor-grok-*` and `composer-*`. A refused `composer-*` entry runs on `sonnet`. "
+     "With no family match, use `opus`. If it rejects a default, use `opus` and say so.",
      "If the Agent tool rejects a configured entry or a default (`fable` is not on every plan), run that seat on `opus` and say so."),
     ("skills/why/SKILL.md",
      "Before spawning investigators, list the available MCPs from the Cursor environment. Use the available-tools map when present. Otherwise "
@@ -358,13 +383,16 @@ PATCHES = [
      "Each live lane runs on its own cloud VM at the PR head.",
      "Each live lane runs in its own remote agent (`isolation: \"remote\"`) or worktree at the PR head."),
     ("skills/poteto-mode/playbooks/autopilot-full.md",
-     "re-read this playbook from trunk with `git show origin/main:pstack/skills/poteto-mode/playbooks/autopilot-full.md`",
-     "re-read this playbook from the pstack root with `cat <pstack root>/skills/poteto-mode/playbooks/autopilot-full.md` "
-     "(`git show origin/main:<path>` when pstack is vendored in this repo)"),
+     "Each tick re-reads this playbook from trunk and fixes drift,",
+     "Each tick re-reads this playbook from the pstack root (`<pstack root>/skills/poteto-mode/playbooks/autopilot-full.md`, "
+     "or `git show origin/main:<path>` when pstack is vendored in this repo) and fixes drift,"),
+    ("skills/poteto-mode/playbooks/autopilot-full.md",
+     "start a decision trail in the root agent's store (path in the system prompt)",
+     "start a decision trail in the root's pstack store (`~/.claude/pstack/<project-slug>/`, or the repo or a pushed branch in a cloud session)"),
     ("skills/poteto-mode/playbooks/autopilot-stack.md",
-     "re-read this playbook from trunk with `git show origin/main:pstack/skills/poteto-mode/playbooks/autopilot-stack.md`",
-     "re-read this playbook from the pstack root with `cat <pstack root>/skills/poteto-mode/playbooks/autopilot-stack.md` "
-     "(`git show origin/main:<path>` when pstack is vendored in this repo)"),
+     "Each tick re-reads both playbooks from trunk, and this one wins where they differ.",
+     "Each tick re-reads both playbooks from the pstack root (`<pstack root>/skills/poteto-mode/playbooks/`, "
+     "or `git show origin/main:<path>` when pstack is vendored in this repo), and this one wins where they differ."),
     ("skills/poteto-mode/playbooks/worktree-cleanup.md",
      "a hand-typed `myrepo-worktrees/x` misses one that lives at `.cursor/worktrees/myrepo/x`",
      "a hand-typed `myrepo-worktrees/x` misses one that lives at `.claude/worktrees/x`"),
@@ -411,6 +439,15 @@ PATCHES = [
     ("docs/guide/01-setup.md",
      "keeps any role whose model differs from the default.",
      "keeps the roles you changed by hand."),
+    ("skills/ketchup/SKILL.md",
+     "a chart or diagram from `/visualize`, or a generated image.",
+     "a chart or diagram you render (an image, or an artifact where the app offers one), or a generated image."),
+    ("skills/ketchup/SKILL.md",
+     "and a `/visualize` chart for numbers.",
+     "and a chart you render for numbers (a Mermaid chart, an image, or an artifact where the app offers one)."),
+    ("README.md",
+     "pick `/poteto-mode` from the `/` menu before you type your task, so cursor attaches the skill to the message.",
+     "pick `/pstack:poteto-mode` (or the `/poteto-mode` shortcut) from the `/` menu before you type your task, so claude loads the skill with the message."),
     # ---- docs ----------------------------------------------------------------
     ("docs/guide/01-setup.md",
      "In a Cursor chat, run:\n\n```text\n/add-plugin pstack\n```\n\nCursor confirms the plugin is installed.",

@@ -2,12 +2,20 @@
 
 Newest first. The Claude agent that syncs this repo adds one entry per landed update.
 
-## 0.15.21-claude.1 (2026-10-13)
+## 0.15.23-claude.1 (2026-10-14)
 
-Synced `cursor/plugins@df58112..1dcc2ba` (pstack 0.15.15 to 0.15.21). This includes the 0.15.17 and 0.15.19 syncs from #2 and #3, which never reached `main`.
+Synced `cursor/plugins@df58112..ce649c0` (pstack 0.15.15 to 0.15.23). This includes the 0.15.17, 0.15.19, and 0.15.21 syncs from #2, #3, and #4, which never reached `main`.
 
 Upstream:
 
+- feat(pstack): match subagent effort to the job, drop Graphite from orchestrate, and cut playbooks to principles (#613)
+- refactor(pstack): make /ketchup read like /bro in 150 words (#609)
+- refactor(pstack): reword /in-your-own-words around goals and the problem (#606)
+- chore(pstack): bump to 0.15.22 (#605)
+- feat(pstack): propose a cheap always-on signal after a deep debugging dig (#604)
+- feat(pstack): shorten /ketchup replies and build them on real visuals (#595)
+- feat(pstack): add /in-your-own-words to play back the goal before work (#602)
+- fix(pstack): let poteto-agent find poteto-mode, drop ignored frontmatter, document the / menu (#597)
 - chore(pstack): bump to 0.15.21 (#584)
 - fix(pstack): tell agents where bundled leaf skills live (#577)
 - chore(pstack): bump to 0.15.20 (#581)
@@ -35,6 +43,14 @@ Port changes:
 - New rewrite: "Task spawn" becomes "Agent spawn" (new in `poteto-agent`).
 - Upstream's new root `plugin.json` (Agent Plugins v1) ships with the port's name, version, and description, so it matches `.claude-plugin/plugin.json`.
 - `worktree-audit.sh` now prints a `# base:` line before its header. The verify check skips it. The Claude transcript blocks still apply unchanged.
+- Upstream's per-spawn "reasoning level and fast or standard speed" becomes the Agent tool's `effort` parameter. Every role starts at `xhigh`, since the port's `/setup-pstack` budget picks models, not effort levels. Claude has no per-subagent fast mode, so the speed half is dropped. With no `effort` parameter, agents spawn without it. New rewrite for the one-line pointer repeated across ~30 skills and playbooks.
+- `poteto-agent`'s new no-path fallback searches `~/.claude/plugins/` and compares `.claude-plugin/plugin.json` versions. The "skill catalog hides this skill" sentence is dropped, because the port's `poteto-mode` is listed by the Skill tool and loads from it first.
+- `poteto-mode` dropped "`/poteto-mode` and `poteto-agent` route through the same wrapper", so the port's `general-purpose` fallback now follows "Never spawn a `poteto-agent` to run the playbook itself."
+- The `arena` and `interrogate` fallback patches now match upstream's new `cursor-grok-*` and `composer-*` families. The port still has no families and falls back by model.
+- Rewritten `autopilot-full` and `autopilot-stack`: the per-tick re-read points at the pstack root (or `git show origin/main:` when vendored), and the decision trail goes in `~/.claude/pstack/<project-slug>/`. "Branches from that item's branch, not from trunk" is allowlisted, since it is about branching, not reading from trunk.
+- `/ketchup`'s `/visualize` (a Cursor built-in) becomes a chart you render: a Mermaid chart, an image, or an artifact where the app offers one.
+- The README's new `/` menu line names `/pstack:poteto-mode` and the shortcut, and says Claude loads the skill.
+- `/in-your-own-words` ships as is, typed-only like upstream. The `/pstack` router routes it by name.
 - The `poteto-agent` load patch now keeps upstream's new "Use the absolute path your parent gave you": it loads `pstack:poteto-mode` through the Skill tool, or Reads the `SKILL.md` at that path (`${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md`). The new `poteto-mode` line about `../<name>/SKILL.md` ships as is, because the layout is the same under `plugin/skills/`.
 
 ## 0.15.15-claude.1 (2026-10-06)

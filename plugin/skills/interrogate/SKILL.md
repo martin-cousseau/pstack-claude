@@ -38,7 +38,7 @@ Each reviewer gets `subagent_type: general-purpose`, "Do not edit, write, or com
 
 If the Agent tool rejects a configured entry, run that reviewer on Reviewer A's default and say so. If it rejects a table default (`fable` is not on every plan), pick the strongest model the Agent tool accepts that is not already on the panel, spawn with it, and say so. Do not block the review on the slug issue. Never treat an alias entry as a rejected slug or apply either fallback to it.
 
-Read `references/reviewer-prompt.md` and fill in the same template for every reviewer with the stated intent, the diff or file contents, the rubric from `references/rubric.md`, and the code-quality lens from `references/code-quality-review.md`.
+Read `references/reviewer-prompt.md` and fill in the same template for every reviewer with the stated intent, the diff or file contents, the rubric from `references/rubric.md`, and the code-quality lens from `references/code-quality-review.md`. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
 
 ## Step 4, Synthesize
 
