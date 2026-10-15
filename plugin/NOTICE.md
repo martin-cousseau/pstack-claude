@@ -1,6 +1,6 @@
 # Notice
 
-pstack is by Lauren Tan (poteto), MIT licensed. See `LICENSE`. Source: https://github.com/cursor/plugins/tree/main/pstack (commit ce649c0, plugin version 0.15.23).
+pstack is by Lauren Tan (poteto), MIT licensed. See `LICENSE`. Source: https://github.com/cursor/plugins/tree/main/pstack (commit e5136d8, plugin version 0.15.25).
 
 `skills/deslop`, `skills/control-cli`, and `skills/control-ui` come from Cursor's `cursor-team-kit` plugin (https://github.com/cursor/plugins/tree/main/cursor-team-kit), MIT licensed, copyright 2026 Cursor.
 

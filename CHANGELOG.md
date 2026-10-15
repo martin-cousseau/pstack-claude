@@ -2,12 +2,18 @@
 
 Newest first. The Claude agent that syncs this repo adds one entry per landed update.
 
-## 0.15.23-claude.1 (2026-10-14)
+## 0.15.25-claude.1 (2026-10-15)
 
-Synced `cursor/plugins@df58112..ce649c0` (pstack 0.15.15 to 0.15.23). This includes the 0.15.17, 0.15.19, and 0.15.21 syncs from #2, #3, and #4, which never reached `main`.
+Synced `cursor/plugins@df58112..e5136d8` (pstack 0.15.15 to 0.15.25). This includes the 0.15.17, 0.15.19, 0.15.21, and 0.15.23 syncs from #2, #3, #4, and #5, which never reached `main`.
 
 Upstream:
 
+- pstack: restate four overspecified principles as reasoning, not rules (#633)
+- chore(pstack): bump to 0.15.25 (#614)
+- feat(pstack): have /ketchup explain changes with screenshots, videos, and diagrams (#628)
+- chore(pstack): bump to 0.15.24 (#617)
+- feat(pstack): add /sharpen (#615)
+- pstack: autopilot loops catch the operator up with /ketchup (#616)
 - feat(pstack): match subagent effort to the job, drop Graphite from orchestrate, and cut playbooks to principles (#613)
 - refactor(pstack): make /ketchup read like /bro in 150 words (#609)
 - refactor(pstack): reword /in-your-own-words around goals and the problem (#606)
@@ -34,6 +40,7 @@ Upstream:
 
 Port changes:
 
+- `/sharpen`, the reworded principles, the `/ketchup` visuals rewrite, and the autopilot `/ketchup` replies ship as is. They have no Cursor-specific wording, and every patch still applied. `/sharpen` is typed-only like upstream, and `sharpen` is an ordinary word, so the `/pstack` router sends it by name only as `/sharpen` or `pstack:sharpen`.
 - `/ketchup` ships as is. It has no Cursor-specific wording.
 - Seven patches drifted under upstream's rewording of `reflect`, `interrogate`, and `why`. Each now targets the new text with the same Claude translation: transcripts under `~/.claude/projects/<slug>/`, the `type: user` first-line check, no model families in the `interrogate` fallback, and full tool access instead of agent mode in `why`.
 - The `interrogate` "A/B/C labels" patch is gone. Upstream now labels reviewers to match the entry count.
