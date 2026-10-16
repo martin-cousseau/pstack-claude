@@ -2,12 +2,13 @@
 
 Newest first. The Claude agent that syncs this repo adds one entry per landed update.
 
-## 0.15.25-claude.1 (2026-10-15)
+## 0.15.25-claude.2 (2026-10-16)
 
-Synced `cursor/plugins@df58112..e5136d8` (pstack 0.15.15 to 0.15.25). This includes the 0.15.17, 0.15.19, 0.15.21, and 0.15.23 syncs from #2, #3, #4, and #5, which never reached `main`.
+Synced `cursor/plugins@df58112..f713f14` (pstack 0.15.15 to 0.15.25). This includes the 0.15.17, 0.15.19, 0.15.21, 0.15.23, and 0.15.25-claude.1 syncs from #2, #3, #4, #5, and #6, which never reached `main`.
 
 Upstream:
 
+- refactor(pstack): cut marginal sections from four skills (#634)
 - pstack: restate four overspecified principles as reasoning, not rules (#633)
 - chore(pstack): bump to 0.15.25 (#614)
 - feat(pstack): have /ketchup explain changes with screenshots, videos, and diagrams (#628)
@@ -40,6 +41,7 @@ Upstream:
 
 Port changes:
 
+- Upstream cut the `swarm` line "N is total workers, not the cloud concurrency limit.", so the patch that made it "remote concurrency limit" is gone. The other cuts in `interrogate`, `swarm`, and two principles ship as is.
 - `/sharpen`, the reworded principles, the `/ketchup` visuals rewrite, and the autopilot `/ketchup` replies ship as is. They have no Cursor-specific wording, and every patch still applied. `/sharpen` is typed-only like upstream, and `sharpen` is an ordinary word, so the `/pstack` router sends it by name only as `/sharpen` or `pstack:sharpen`.
 - `/ketchup` ships as is. It has no Cursor-specific wording.
 - Seven patches drifted under upstream's rewording of `reflect`, `interrogate`, and `why`. Each now targets the new text with the same Claude translation: transcripts under `~/.claude/projects/<slug>/`, the `type: user` first-line check, no model families in the `interrogate` fallback, and full tool access instead of agent mode in `why`.
