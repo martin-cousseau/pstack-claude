@@ -29,6 +29,7 @@
 ## not ported
 
 - `make-bot-ui` drives cursor's grok bot webhook routines. it ships unchanged, marked cursor-only.
+- upstream's own claude code install (`/plugin install pstack@cursor-plugins`) keeps the cursor names and maps them at runtime through an adapter, `docs/harness/claude-code.md`. this port translates the skills instead, so it leaves out the adapter and those install lines.
 - the benny automation pack runs on cursor automations. it ships verbatim under `automations/benny/` for reference.
 - `watch-pr` and `orch` need [bun](https://bun.sh) and `gh`. stacked-pr flows also use `gt` (graphite). the first run does a `bun install` next to the scripts (`commander`, plus the `typescript` and `bun-types` dev dependencies), so the plugin directory must be writable.
 

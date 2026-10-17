@@ -149,6 +149,8 @@ def main() -> None:
     if OUT.exists():
         shutil.rmtree(OUT)
     shutil.copytree(SRC, OUT, ignore=shutil.ignore_patterns(".cursor-plugin", "node_modules"))
+    # Upstream's Claude Code adapter maps Cursor names at runtime. The port translates the skills instead.
+    shutil.rmtree(OUT / "docs" / "harness", ignore_errors=True)
     (OUT / ".claude-plugin").mkdir()
 
 

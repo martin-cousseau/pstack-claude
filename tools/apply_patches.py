@@ -335,6 +335,14 @@ PATCHES = [
      "in cursor, `/deslop`, `control-cli`, and `control-ui` ship in the `cursor-team-kit` plugin. this claude port bundles all three (MIT, "
      "copyright cursor). skill authoring routes to anthropic's `skill-creator` skill in place of cursor's built-in `create-skill`. inside "
      "`poteto-mode`, the [babysit playbook](./skills/poteto-mode/playbooks/babysit.md) handles pr-status requests."),
+    ("README.md",
+     "in claude code:\n\n```bash\n/plugin marketplace add cursor/plugins\n/plugin install pstack@cursor-plugins\n```\n\n"
+     "claude code prefixes plugin commands and agents, so `/poteto-mode` is `/pstack:poteto-mode`. the [claude code adapter]"
+     "(./docs/harness/claude-code.md) maps every other cursor name.\n\n"
+     "claude code installs a generated copy of pstack from [`harness/pstack/`](https://github.com/cursor/plugins/tree/main/harness/pstack) "
+     "at the repository root. after changing `skills/`, `agents/`, `docs/harness/claude-code.md`, or `plugin.json`, run "
+     "`node scripts/generate-pstack-harness-trees.mjs` from the repository root and commit the result. ci fails until you do.\n\n",
+     ""),
     ("README.md", "cursor already has a great plan mode which works great with pstack.",
      "claude code already has a plan mode which works great with pstack."),
     ("README.md",
@@ -347,7 +355,8 @@ PATCHES = [
      "a rerun keeps any role whose model differs from the default.", "a rerun keeps the roles you changed by hand."),
     ("README.md",
      "to set it up, point cursor at [`FOR_AGENTS.md`](./automations/benny/FOR_AGENTS.md). setup copies the pack into the target repository at "
-     "`.claude/automations/benny/`, enables pstack there for shared skills, and keeps user configuration outside the copied pack.",
+     "`.claude/automations/benny/`, enables pstack there for shared skills, and keeps user configuration outside the copied pack. "
+     "benny runs on cursor automations, so it is cursor-only.",
      "benny runs on cursor automations (slack-triggered cloud agents), which claude has no direct equivalent for, so this port ships the pack "
      "verbatim for reference. in cursor, setup starts by pointing cursor at [`FOR_AGENTS.md`](./automations/benny/FOR_AGENTS.md)."),
 

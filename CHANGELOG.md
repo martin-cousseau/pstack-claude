@@ -2,6 +2,20 @@
 
 Newest first. The Claude agent that syncs this repo adds one entry per landed update.
 
+## 0.15.25-claude.3 (2026-10-17)
+
+Synced `cursor/plugins@f713f14..101b274` (pstack 0.15.25). This stacks on #7, which with #2 through #6 has not reached `main`, so landing it carries the whole `df58112..101b274` range.
+
+Upstream:
+
+- feat(pstack): install pstack in Claude Code from a generated tree (#637)
+
+Port changes:
+
+- Upstream's new Claude Code adapter, `docs/harness/claude-code.md`, is left out. It maps Cursor names at runtime, and the port translates the skills instead, so a rewritten copy would map Claude names to themselves.
+- The README drops upstream's new Claude Code install lines and the note on regenerating `harness/pstack/`. A "not ported" line in the port header says why.
+- The benny README patch now also covers upstream's added "so it is cursor-only" sentence, which the port's note already says.
+
 ## 0.15.25-claude.2 (2026-10-16)
 
 Synced `cursor/plugins@df58112..f713f14` (pstack 0.15.15 to 0.15.25). This includes the 0.15.17, 0.15.19, 0.15.21, 0.15.23, and 0.15.25-claude.1 syncs from #2, #3, #4, #5, and #6, which never reached `main`.
