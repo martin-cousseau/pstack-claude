@@ -2,12 +2,17 @@
 
 Newest first. The Claude agent that syncs this repo adds one entry per landed update.
 
-## 0.15.25-claude.3 (2026-10-17)
+## 0.15.25-claude.4 (2026-10-18)
 
-Synced `cursor/plugins@df58112..101b274` (pstack 0.15.15 to 0.15.25). This includes the 0.15.17, 0.15.19, 0.15.21, 0.15.23, 0.15.25-claude.1, and 0.15.25-claude.2 syncs from #2 through #7, which never reached `main`.
+Synced `cursor/plugins@df58112..16541c6` (pstack 0.15.15 to 0.15.25). This includes the 0.15.17, 0.15.19, 0.15.21, 0.15.23, 0.15.25-claude.1, 0.15.25-claude.2, and 0.15.25-claude.3 syncs from #2 through #8, which never reached `main`.
 
 Upstream:
 
+- fix(pstack): list every waiting item so each ketchup call is decidable (#692)
+- pstack: refresh the docs and add a docs-vs-tree check (#704)
+- fix(pstack): close three gaps in the Claude Code plugin (#705)
+- fix(pstack): name every skill after its folder (#702)
+- fix(pstack): make a brand with a type guard, not as (#700)
 - feat(pstack): install pstack in Claude Code from a generated tree (#637)
 - refactor(pstack): cut marginal sections from four skills (#634)
 - pstack: restate four overspecified principles as reasoning, not rules (#633)
@@ -42,6 +47,10 @@ Upstream:
 
 Port changes:
 
+- Upstream now names `poteto-mode` and `make-bot-ui` after their folders, so the port's two frontmatter rename patches are gone.
+- Four README and guide patches drifted under upstream's doc refresh (the custom-mode paragraph and its new `#using-a-skill-as-a-custom-mode` link, the "doesn't bundle" list that now names Cursor's built-in `/autopilot`, and the reworded Claude Code install block). Each now targets the new text with the same translation, and the install block is still deleted.
+- The `/ketchup` rewrite (every waiting item listed and decidable from the reply) and the TypeScript type-guard brand pattern ship as is. They have no Cursor-specific wording.
+- Upstream's Claude Code adapter (`docs/harness/claude-code.md`) gained rows and is still left out.
 - Upstream's new Claude Code adapter, `docs/harness/claude-code.md`, is left out. It maps Cursor names at runtime, and the port translates the skills instead, so a rewritten copy would map Claude names to themselves.
 - The README drops upstream's new Claude Code install lines and the note on regenerating `harness/pstack/`. A "not ported" line in the port header says why.
 - The benny README patch now also covers upstream's added "so it is cursor-only" sentence, which the port's note already says.

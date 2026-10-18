@@ -34,8 +34,6 @@ MODELS_WHERE = "`pstack-models.md` (the project's `.claude/rules/pstack-models.m
 PATCHES = [
     # ---- poteto-mode -------------------------------------------------------
     ("skills/poteto-mode/SKILL.md",
-     "name: Poteto Mode\n", "name: poteto-mode\n"),
-    ("skills/poteto-mode/SKILL.md",
      "disable-model-invocation: true\n---\n", "---\n"),
     ("skills/poteto-mode/SKILL.md",
      "# Poteto mode\n\n",
@@ -286,7 +284,6 @@ PATCHES = [
      "| Build a page whose buttons wake a Cursor Grok Bot over a webhook (Cursor-only, kept for reference) | [`/make-bot-ui`](../make-bot-ui/SKILL.md) |"),
 
     # ---- make-bot-ui: Cursor-only ---------------------------------------------
-    ("skills/make-bot-ui/SKILL.md", "name: Make Bot UI\n", "name: make-bot-ui\n"),
     ("skills/make-bot-ui/SKILL.md",
      "# How to make a bot UI\n\n",
      "# How to make a bot UI\n\n"
@@ -311,9 +308,8 @@ PATCHES = [
      "the default panel is opus / fable / sonnet."),
     ("README.md",
      "pick it from the `/` menu and press option+enter (mac) or alt+enter (windows) instead of enter. that makes it a "
-     "[custom mode](https://cursor.com/docs/skills), which cursor offers in the agents window and the cli. it stays in context every turn, applies "
-     "itself when a playbook matches or the task needs rigor, and stays out of the way otherwise. plain enter attaches it to one message only. "
-     "say so to opt out, or exit the mode to turn it off.",
+     "[custom mode](https://cursor.com/docs/skills#using-a-skill-as-a-custom-mode), which cursor offers in the agents window and the cli. "
+     "it stays in context every turn until you exit the mode. plain enter attaches it to one message only.",
      "just invoke it: claude has no custom modes, but once loaded the skill stays in the conversation for the rest of the chat. say so to opt out. "
      "to have it in every chat, add a rule file such as `~/.claude/rules/poteto-mode.md` saying \"for non-trivial engineering work, load the pstack:poteto-mode skill first.\""),
     ("README.md",
@@ -329,8 +325,8 @@ PATCHES = [
      "a few things `poteto-mode` references but doesn't bundle:\n\n"
      "- `/deslop` and the `deslop` skill ship in the `cursor-team-kit` plugin.\n"
      "- `control-cli` (for CLIs and TUIs) and `control-ui` (for browser, Electron, web) ship in `cursor-team-kit` too.\n"
-     "- `/skill-creator` is a cursor built-in. cursor also ships a built-in `/babysit`; inside `poteto-mode`, the "
-     "[babysit playbook](./skills/poteto-mode/playbooks/babysit.md) supersedes it for pr-status requests.\n\n"
+     "- `/skill-creator` is a cursor built-in. cursor also ships a built-in `/autopilot` that watches a pr. inside `poteto-mode`, "
+     "pr-status requests go to the [babysit playbook](./skills/poteto-mode/playbooks/babysit.md) instead.\n\n"
      "install `cursor-team-kit` alongside pstack if you want the full set.",
      "in cursor, `/deslop`, `control-cli`, and `control-ui` ship in the `cursor-team-kit` plugin. this claude port bundles all three (MIT, "
      "copyright cursor). skill authoring routes to anthropic's `skill-creator` skill in place of cursor's built-in `create-skill`. inside "
@@ -338,10 +334,11 @@ PATCHES = [
     ("README.md",
      "in claude code:\n\n```bash\n/plugin marketplace add cursor/plugins\n/plugin install pstack@cursor-plugins\n```\n\n"
      "claude code prefixes plugin commands and agents, so `/poteto-mode` is `/pstack:poteto-mode`. the [claude code adapter]"
-     "(./docs/harness/claude-code.md) maps every other cursor name.\n\n"
-     "claude code installs a generated copy of pstack from [`harness/pstack/`](https://github.com/cursor/plugins/tree/main/harness/pstack) "
-     "at the repository root. after changing `skills/`, `agents/`, `docs/harness/claude-code.md`, or `plugin.json`, run "
-     "`node scripts/generate-pstack-harness-trees.mjs` from the repository root and commit the result. ci fails until you do.\n\n",
+     "(./docs/harness/claude-code.md) maps every other cursor name. in claude code, `/pstack:setup-pstack` writes your model choices to "
+     "`~/.claude/rules/pstack-models.md`, and a step that needs a cursor-only feature, such as bugbot or automations, is skipped with a one-line note.\n\n"
+     "claude code installs a generated copy of pstack, including this readme and the guide, from "
+     "[`harness/pstack/`](https://github.com/cursor/plugins/tree/main/harness/pstack) at the repository root. after you change pstack, run "
+     "`node scripts/generate-pstack-harness-trees.mjs` from the repository root and commit the result. ci fails while the generated copy is out of date.\n\n",
      ""),
     ("README.md", "cursor already has a great plan mode which works great with pstack.",
      "claude code already has a plan mode which works great with pstack."),
@@ -481,7 +478,7 @@ PATCHES = [
      "After setup, start a new chat. Rule files load at session start, so the config applies to new sessions."),
     ("docs/guide/01-setup.md",
      "To keep `/poteto-mode` on for the whole chat, pick it from the `/` menu with Option+Enter (Mac) or Alt+Enter (Windows) instead of Enter. "
-     "That makes it a [Custom Mode](https://cursor.com/docs/skills), which stays in context on every turn until you exit it. Custom Modes are "
+     "That makes it a [Custom Mode](https://cursor.com/docs/skills#using-a-skill-as-a-custom-mode), which stays in context on every turn until you exit it. Custom Modes are "
      "available in the Agents Window and the CLI. Plain Enter attaches the skill to one message, and it fades as the chat moves on.",
      "Once invoked, `/poteto-mode` stays in the conversation and keeps applying for the rest of the chat. Claude has no Custom Modes, so to have it "
      "in every chat, add a rule file such as `~/.claude/rules/poteto-mode.md` saying \"For non-trivial engineering work, load the pstack:poteto-mode skill first.\""),
