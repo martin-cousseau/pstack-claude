@@ -2,12 +2,21 @@
 
 Newest first. The Claude agent that syncs this repo adds one entry per landed update.
 
-## 0.15.25-claude.4 (2026-10-18)
+## 0.15.28-claude.1 (2026-10-19)
 
-Synced `cursor/plugins@df58112..16541c6` (pstack 0.15.15 to 0.15.25). This includes the 0.15.17, 0.15.19, 0.15.21, 0.15.23, 0.15.25-claude.1, 0.15.25-claude.2, and 0.15.25-claude.3 syncs from #2 through #8, which never reached `main`.
+Synced `cursor/plugins@df58112..d457567` (pstack 0.15.15 to 0.15.28). This includes the 0.15.17, 0.15.19, 0.15.21, 0.15.23, and 0.15.25-claude.1 through claude.4 syncs from #2 through #9, which never reached `main`.
 
 Upstream:
 
+- chore(pstack): bump to 0.15.28, sync guide with create-formal-verification-skill (#724)
+- pstack: add maintain-formal-verification-skill (#716)
+- fix(pstack): add TLA+ default and no-verifier fallback to create-formal-verification-skill (#721)
+- pstack: offer formal verification in setup, sync help and guide (#715)
+- chore(pstack): bump to 0.15.27 (#713)
+- pstack: drop the rewritten-prompt ban from sharpen (#712)
+- chore(pstack): bump to 0.15.26 (#710)
+- feat(pstack): add /create-formal-verification-skill (#709)
+- fix(pstack): say outright that ketchup never cuts items to stay under a word count (#708)
 - fix(pstack): list every waiting item so each ketchup call is decidable (#692)
 - pstack: refresh the docs and add a docs-vs-tree check (#704)
 - fix(pstack): close three gaps in the Claude Code plugin (#705)
@@ -47,6 +56,11 @@ Upstream:
 
 Port changes:
 
+- `/create-formal-verification-skill` and `/maintain-formal-verification-skill` ship as is. They have no Cursor-specific wording.
+- `/setup-pstack` is a port-owned file, so upstream's new "offer a formal verification skill" step is ported by hand as step 9 of `tools/patches/setup-pstack.md`. It names `/pstack:create-formal-verification-skill` and Reads that skill's `SKILL.md` from the plugin root, like the step 8 verification offer.
+- The `/poteto-help` "built for Cursor" patch drifted: upstream split it into a Claude Code install paragraph (pointing at the adapter the port leaves out) and an "other tools" paragraph. Both are replaced with the port's existing Claude paragraph.
+- Upstream's new Claude Code install paragraph in guide page 1 is deleted, as in the README. It installs upstream's tree, not this plugin, and links the adapter the port leaves out.
+- The guide's new formal verification, `/sharpen`, `/in-your-own-words`, and `/ketchup` sections ship as is.
 - Upstream now names `poteto-mode` and `make-bot-ui` after their folders, so the port's two frontmatter rename patches are gone.
 - Four README and guide patches drifted under upstream's doc refresh (the custom-mode paragraph and its new `#using-a-skill-as-a-custom-mode` link, the "doesn't bundle" list that now names Cursor's built-in `/autopilot`, and the reworded Claude Code install block). Each now targets the new text with the same translation, and the install block is still deleted.
 - The `/ketchup` rewrite (every waiting item listed and decidable from the reply) and the TypeScript type-guard brand pattern ship as is. They have no Cursor-specific wording.

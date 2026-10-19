@@ -240,7 +240,11 @@ PATCHES = [
      "A role set to `auto` or `inherit-parent` runs on the chat's model, which saves tokens when the chat runs on Auto or a cheaper model.",
      "A role set to `auto` or `inherit-parent` runs on the chat's model, which saves tokens when the chat runs on a cheaper model."),
     ("skills/poteto-help/SKILL.md",
-     "pstack is built for Cursor. Its skills use the Agent Skills format, so other tools can read them. But most workflow skills, including "
+     "pstack is built for Cursor, and it also installs in Claude Code with `/plugin marketplace add cursor/plugins`, then "
+     "`/plugin install pstack@cursor-plugins`. There, each command takes a `pstack:` prefix, such as `/pstack:poteto-mode`. "
+     "The [Claude Code adapter](../../docs/harness/claude-code.md) maps the Cursor names, and a step that needs a Cursor-only feature, "
+     "such as Bugbot or Automations, is skipped with a one-line note.\n\n"
+     "Other tools can read the skills, because they use the Agent Skills format. But most workflow skills, including "
      "`/poteto-mode`, `/how`, `/why`, and `/teach`, spawn Cursor subagents with per-role models, and Custom Modes and `/loop` are Cursor features, "
      "so those parts may not work there.",
      "This is the Claude port of pstack, which was built for Cursor. Subagents run through Claude's Agent tool with Claude models per role "
@@ -436,6 +440,11 @@ PATCHES = [
     ("skills/poteto-help/SKILL.md", "\n\n Mid-chat, \"new task\"", "\n\nMid-chat, \"new task\""),
     ("skills/poteto-help/SKILL.md", "| Pick a model for each role and a reasoning budget |", "| Pick a model for each role and a budget |"),
     ("skills/poteto-help/SKILL.md", "or race workers, as cloud agents |", "or race workers, as remote agents |"),
+    ("docs/guide/01-setup.md",
+     "\n\nIn Claude Code, run `/plugin marketplace add cursor/plugins`, then `/plugin install pstack@cursor-plugins`. Claude Code prefixes plugin "
+     "commands, so each command in this guide takes a `pstack:` prefix there, such as `/pstack:setup-pstack`, which writes its model rule to "
+     "`~/.claude/rules/pstack-models.md`. The [Claude Code adapter](../harness/claude-code.md) covers the other differences.",
+     ""),
     ("docs/guide/01-setup.md",
      "detects the models you have access to, asks for a reasoning budget, shows you each role",
      "detects the models you have access to, asks whether the config is just yours or committed with the project, asks for a budget, shows you each role"),
