@@ -34,8 +34,6 @@ MODELS_WHERE = "`pstack-models.md` (the project's `.claude/rules/pstack-models.m
 PATCHES = [
     # ---- poteto-mode -------------------------------------------------------
     ("skills/poteto-mode/SKILL.md",
-     "name: Poteto Mode\n", "name: poteto-mode\n"),
-    ("skills/poteto-mode/SKILL.md",
      "disable-model-invocation: true\n---\n", "---\n"),
     ("skills/poteto-mode/SKILL.md",
      "# Poteto mode\n\n",
@@ -49,8 +47,8 @@ PATCHES = [
      "- There is no Custom Mode. Once loaded, this file stays in the conversation and keeps applying to later turns. "
      "\"New task\" rematches a playbook. The user opts out by saying so.\n\n"),
     ("skills/poteto-mode/SKILL.md",
-     "`/poteto-mode` and `poteto-agent` route through the same wrapper.",
-     "`/poteto-mode` and `poteto-agent` route through the same wrapper. If the Agent tool does not list `pstack:poteto-agent`, use `general-purpose` "
+     "Never spawn a `poteto-agent` to run the playbook itself.",
+     "Never spawn a `poteto-agent` to run the playbook itself. If the Agent tool does not list `pstack:poteto-agent`, use `general-purpose` "
      "and open the brief with \"Before any work, read `${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md` in full, including its Principles index.\" with the path expanded."),
     ("skills/poteto-mode/SKILL.md",
      "`run_in_background: true`, agent mode (readonly strips MCP),",
@@ -69,15 +67,39 @@ PATCHES = [
      "Prose and judgment read `judgment and prose`.",
      "Prose and judgment read `judgment and prose`. If a subagent cannot spawn subagents of its own in this harness, "
      "the parent runs that fan-out itself and hands the results down."),
+    ("skills/poteto-mode/SKILL.md",
+     "**Match the model to the job.** Before each spawn, start from the role's line or default and pick the reasoning level and speed the job needs. "
+     "The `/setup-pstack` budget sets each role's starting level, xhigh by default. Raise it one step, up to max, for the hardest or subtlest work. "
+     "Lower it one step for judgment and two or more steps for routine work. Use fast mode only when the job is urgent, meaning CI or trunk is red "
+     "or a person is blocked on the result right now. Otherwise use standard speed, the same slug without `-fast`. Verification is the exception "
+     "and stays on the `swarm workers` model and speed (`sonnet` by default). Change only the effort level and whether the slug is fast, and keep "
+     "the family the role names, so a diverse panel stays diverse. If the family has no slug at that level and speed, use its nearest slug. "
+     "A role on `auto` or `inherit-parent` stays on the parent model. If the Agent tool rejects the adjusted slug, do not try another adjusted slug. "
+     "Use the role's line or default and say so.",
+     "**Match the effort to the job.** Before each spawn, start from the role's line or default and pick the effort the job needs, through the "
+     "Agent tool's `effort` parameter (`low`, `medium`, `high`, `xhigh`, `max`). Every role starts at `xhigh`. The `/setup-pstack` budget picks "
+     "each role's model, not its effort. Raise it one step, up to `max`, for the hardest or subtlest work. Lower it one step for judgment and two "
+     "or more steps for routine work. Verification is the exception and stays on the `swarm workers` model at `xhigh` (`sonnet` by default). "
+     "Change only the effort, never the model the role names, so a diverse panel stays diverse. A role on `auto` or `inherit-parent` stays on the "
+     "parent model. If the Agent tool has no `effort` parameter or rejects the level, spawn without `effort` and say so. Claude has no per-subagent "
+     "fast mode, so every subagent runs at standard speed."),
 
     # ---- agents --------------------------------------------------------------
     ("agents/poteto-agent.md",
      "Read the `poteto-mode` skill's `SKILL.md` in full before doing any work, including its inline Principles index. "
+     "Use the absolute path your parent gave you. "
+     "With no path, before any other work, search `~/.claude/plugins/` for a file whose path ends in `skills/poteto-mode/SKILL.md`. "
+     "If more than one file matches, use the copy whose `.cursor-plugin/plugin.json` has the highest `version`. "
+     "Your skill catalog hides this skill, so a missing catalog entry does not mean pstack is absent. "
+     "If no such file exists, stop and tell your parent. "
      "Navigate to a leaf `principle-*` skill whenever you apply that principle.",
      "Load the pstack `poteto-mode` skill in full before doing any work, including its inline Principles index. "
-     "Invoke the Skill tool with `pstack:poteto-mode`, or Read `${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md`. "
+     "Invoke the Skill tool with `pstack:poteto-mode`, or Read its `SKILL.md` at the absolute path your parent gave you "
+     "(`${CLAUDE_PLUGIN_ROOT}/skills/poteto-mode/SKILL.md`). "
+     "With neither, before any other work, search `~/.claude/plugins/` for a file whose path ends in `skills/poteto-mode/SKILL.md`. "
+     "If more than one file matches, use the copy whose `.claude-plugin/plugin.json` has the highest `version`. "
+     "If no such file exists, stop and tell your parent. "
      "Navigate to a leaf `principle-*` skill (a sibling directory under `skills/`) whenever you apply that principle."),
-    ("agents/comment-sicko.md", "name: Comment Sicko\n", "name: comment-sicko\n"),
     ("agents/comment-sicko.md",
      "description: A deranged comment-hater that savors deletion and condemns workaround code.",
      "description: A deranged comment-hater that savors deletion and condemns workaround code. Spawned by the pstack /no-comments skill to review comments in a scoped diff."),
@@ -94,15 +116,19 @@ PATCHES = [
      "`<session-id>/subagents/`. Every line is one JSON event: a message, a tool call, or a tool result. If the directory is missing, as in a fresh "
      "cloud session that keeps no history, say so and build the brief from the shared record and live state."),
     ("skills/reflect/SKILL.md",
-     "The system prompt names the active workspace's `agent-transcripts/` directory. Use that path. Do not glob across `~/.cursor/projects/*/`.",
-     "Claude Code keeps the active workspace's transcripts in " + TX_DIR + ". Use that path. Do not glob across `~/.claude/projects/*/`."),
+     "find this conversation's transcript in the `agent-transcripts/` directory the system prompt names. Do not glob across `~/.cursor/projects/*/`.",
+     "find this conversation's transcript. Claude Code keeps the active workspace's transcripts in " + TX_DIR + ". "
+     "Do not glob across `~/.claude/projects/*/`."),
     ("skills/reflect/SKILL.md",
      "ls -t <agent-transcripts>/*.jsonl <agent-transcripts>/*/*.jsonl <agent-transcripts>/*/subagents/*.jsonl 2>/dev/null | head -10",
      "ls -t <transcripts>/*.jsonl <transcripts>/*/subagents/*.jsonl 2>/dev/null | head -10"),
     ("skills/reflect/SKILL.md",
-     "Three transcript layouts: legacy flat (`<id>.jsonl`), current nested (`<id>/<id>.jsonl`), and subagent (`<parent>/subagents/<child>.jsonl`).",
-     "Two transcript layouts: the session (`<session-id>.jsonl`) and its subagents (`<session-id>/subagents/<agent-id>.jsonl`). "
-     "If the directory is missing (a fresh cloud session), digest the current conversation instead and say so."),
+     "That covers the legacy flat (`<id>.jsonl`), current nested (`<id>/<id>.jsonl`), and subagent (`<parent>/subagents/<child>.jsonl`) layouts. "
+     "For each candidate, read the first JSONL line. Take the file whose `message.content[0].text` contains the conversation's opening user prompt.",
+     "That covers the session (`<session-id>.jsonl`) and its subagents (`<session-id>/subagents/<agent-id>.jsonl`). If the directory is missing "
+     "(a fresh cloud session), digest the current conversation instead and say so. For each candidate, find the first line whose `type` is `user`. "
+     "Take the file whose `message.content` contains the conversation's opening user prompt. That field is a string, or, when it is an array, "
+     "the `text` of its first text block."),
     ("skills/poteto-mode/playbooks/session-pickup.md",
      "A local transcript under the active workspace's `agent-transcripts/` directory (the system prompt names the path. Do not glob across "
      "`~/.cursor/projects/*/`, that crosses workspace boundaries and reads private chats from unrelated projects), a cloud-agent URL, or a pushed branch.",
@@ -131,17 +157,24 @@ PATCHES = [
 
     # ---- model panels --------------------------------------------------------
     ("skills/interrogate/SKILL.md",
-     "extending or shrinking the Reviewer A/B labels below", "extending or shrinking the Reviewer A/B/C labels below"),
-    ("skills/interrogate/SKILL.md",
      "| Reviewer A | `opus` |\n| Reviewer B | `sonnet` |\n",
      "| Reviewer A | `opus` |\n| Reviewer B | `fable` |\n| Reviewer C | `sonnet` |\n"),
     ("skills/interrogate/SKILL.md",
-     "If the Agent tool rejects a configured entry, run that reviewer on the table default of its family and say so. Families go by prefix: "
-     "`claude-*` and `grok-*`. With no family match, use Reviewer A's default. If it rejects a table default, check the valid slugs in the "
-     "Agent tool's error message, pick the closest equivalent (prefer the same family and reasoning tier), spawn with it, and open a "
-     "separate PR to update the default table.",
+     "If the Agent tool rejects a configured entry, run that reviewer on its family's table default and say so. Families go by prefix: "
+     "`claude-*`, and `grok-*` with `cursor-grok-*` and `composer-*`. A refused `composer-*` entry runs on Reviewer B's default. "
+     "With no family match, use Reviewer A's default. If it rejects a table default, spawn with the closest "
+     "equivalent from the valid slugs in its error message (prefer the same family and reasoning tier), and open a separate PR to update "
+     "the default table.",
      "If the Agent tool rejects a configured entry, run that reviewer on Reviewer A's default and say so. If it rejects a table default "
      "(`fable` is not on every plan), pick the strongest model the Agent tool accepts that is not already on the panel, spawn with it, and say so."),
+    ("skills/interrogate/SKILL.md",
+     "Each reviewer gets `subagent_type: general-purpose`, `readonly: true`, and `model` set to",
+     "Each reviewer gets `subagent_type: general-purpose`, \"Do not edit, write, or commit anything.\" appended to its prompt (Claude has no "
+     "read-only flag), and `model` set to"),
+    ("skills/how/SKILL.md",
+     "Every spawn is a Agent subagent with `subagent_type: general-purpose` and `readonly: true`.",
+     "Every spawn is an Agent subagent with `subagent_type: general-purpose` and \"Do not edit, write, or commit anything.\" appended to its "
+     "prompt (Claude has no read-only flag)."),
     ("skills/arena/SKILL.md",
      "default to one each on `opus` and `sonnet`.", "default to one each on `opus`, `fable`, `sonnet`."),
     ("skills/arena/SKILL.md",
@@ -151,8 +184,9 @@ PATCHES = [
     ("skills/reflect/SKILL.md",
      "| Tooling | `reflect tooling` | `sonnet` |", "| Tooling | `reflect tooling` | `fable` |"),
     ("skills/arena/SKILL.md",
-     "If the Agent tool rejects a configured entry, run that seat on its family's default and say so. Families go by prefix: `claude-*` "
-     "and `grok-*`. With no family match, use `opus`. If it rejects a default, use `opus` and say so.",
+     "If the Agent tool rejects a configured entry, run that seat on its family's default and say so. Families go by prefix: `claude-*`, "
+     "and `grok-*` with `cursor-grok-*` and `composer-*`. A refused `composer-*` entry runs on `sonnet`. "
+     "With no family match, use `opus`. If it rejects a default, use `opus` and say so.",
      "If the Agent tool rejects a configured entry or a default (`fable` is not on every plan), run that seat on `opus` and say so."),
     ("skills/why/SKILL.md",
      "Before spawning investigators, list the available MCPs from the Cursor environment. Use the available-tools map when present. Otherwise "
@@ -160,22 +194,16 @@ PATCHES = [
      "Before spawning investigators, list the MCP servers available in this session. Their tools are named `mcp__<server>__<tool>`. "
      "Deferred tools show up by name only, so search with ToolSearch when it exists. `gh` and `git` cover source control without an MCP."),
     ("skills/why/SKILL.md",
-     "- `readonly`: `false` (agent mode). **Do not use readonly/Ask mode.** It strips MCP access, which disables MCP-backed investigators entirely. "
-     "Investigators still shouldn't write anything.",
-     "- full tool access: `general-purpose`, never the read-only `Explore` type, so MCP tools stay reachable. Investigators still shouldn't write anything."),
-    ("skills/why/SKILL.md",
-     "- `readonly`: `false` (agent mode). The synthesizer's quality check spot-verifies citations, which can require MCP access. Readonly/Ask mode "
-     "strips MCPs and defeats that.",
-     "- full tool access: `general-purpose`. The synthesizer's quality check spot-verifies citations, which can require MCP access."),
+     "Every spawn is `general-purpose` with `readonly: false` (agent mode). **Do not use readonly/Ask mode.** It strips MCP access, which "
+     "disables the MCP-backed investigators and the synthesizer's citation spot-checks.",
+     "Every spawn is `general-purpose` with full tool access. **Never use the read-only `Explore` type.** It cannot reach MCP tools, which "
+     "disables the MCP-backed investigators and the synthesizer's citation spot-checks."),
     ("skills/swarm/SKILL.md",
      "Use no `isolation` (or `isolation: \"worktree\"` when it writes files) only when the worker needs access to something on the user's",
      "Run it in this checkout (with `isolation: \"worktree\"` when it writes files) only when the worker needs access to something on the user's"),
     ("skills/swarm/SKILL.md",
      "When a worker must start from a non-default pushed branch, pass `cloud_base_branch`.",
      "When a worker must start from a non-default pushed branch, name the branch in its brief and have it check that branch out first."),
-    ("skills/swarm/SKILL.md",
-     "N is total workers, not the cloud concurrency limit.",
-     "N is total workers, not the remote concurrency limit."),
     ("skills/poteto-mode/playbooks/orchestrate.md",
      "Reading local transcripts under `agent-transcripts/`.",
      "Reading local transcripts under `~/.claude/projects/`."),
@@ -212,7 +240,11 @@ PATCHES = [
      "A role set to `auto` or `inherit-parent` runs on the chat's model, which saves tokens when the chat runs on Auto or a cheaper model.",
      "A role set to `auto` or `inherit-parent` runs on the chat's model, which saves tokens when the chat runs on a cheaper model."),
     ("skills/poteto-help/SKILL.md",
-     "pstack is built for Cursor. Its skills use the Agent Skills format, so other tools can read them. But most workflow skills, including "
+     "pstack is built for Cursor, and it also installs in Claude Code with `/plugin marketplace add cursor/plugins`, then "
+     "`/plugin install pstack@cursor-plugins`. There, each command takes a `pstack:` prefix, such as `/pstack:poteto-mode`. "
+     "The [Claude Code adapter](../../docs/harness/claude-code.md) maps the Cursor names, and a step that needs a Cursor-only feature, "
+     "such as Bugbot or Automations, is skipped with a one-line note.\n\n"
+     "Other tools can read the skills, because they use the Agent Skills format. But most workflow skills, including "
      "`/poteto-mode`, `/how`, `/why`, and `/teach`, spawn Cursor subagents with per-role models, and Custom Modes and `/loop` are Cursor features, "
      "so those parts may not work there.",
      "This is the Claude port of pstack, which was built for Cursor. Subagents run through Claude's Agent tool with Claude models per role "
@@ -256,7 +288,6 @@ PATCHES = [
      "| Build a page whose buttons wake a Cursor Grok Bot over a webhook (Cursor-only, kept for reference) | [`/make-bot-ui`](../make-bot-ui/SKILL.md) |"),
 
     # ---- make-bot-ui: Cursor-only ---------------------------------------------
-    ("skills/make-bot-ui/SKILL.md", "name: Make Bot UI\n", "name: make-bot-ui\n"),
     ("skills/make-bot-ui/SKILL.md",
      "# How to make a bot UI\n\n",
      "# How to make a bot UI\n\n"
@@ -281,9 +312,8 @@ PATCHES = [
      "the default panel is opus / fable / sonnet."),
     ("README.md",
      "pick it from the `/` menu and press option+enter (mac) or alt+enter (windows) instead of enter. that makes it a "
-     "[custom mode](https://cursor.com/docs/skills), which cursor offers in the agents window and the cli. it stays in context every turn, applies "
-     "itself when a playbook matches or the task needs rigor, and stays out of the way otherwise. plain enter attaches it to one message only. "
-     "say so to opt out, or exit the mode to turn it off.",
+     "[custom mode](https://cursor.com/docs/skills#using-a-skill-as-a-custom-mode), which cursor offers in the agents window and the cli. "
+     "it stays in context every turn until you exit the mode. plain enter attaches it to one message only.",
      "just invoke it: claude has no custom modes, but once loaded the skill stays in the conversation for the rest of the chat. say so to opt out. "
      "to have it in every chat, add a rule file such as `~/.claude/rules/poteto-mode.md` saying \"for non-trivial engineering work, load the pstack:poteto-mode skill first.\""),
     ("README.md",
@@ -299,12 +329,21 @@ PATCHES = [
      "a few things `poteto-mode` references but doesn't bundle:\n\n"
      "- `/deslop` and the `deslop` skill ship in the `cursor-team-kit` plugin.\n"
      "- `control-cli` (for CLIs and TUIs) and `control-ui` (for browser, Electron, web) ship in `cursor-team-kit` too.\n"
-     "- `/skill-creator` is a cursor built-in. cursor also ships a built-in `/babysit`; inside `poteto-mode`, the "
-     "[babysit playbook](./skills/poteto-mode/playbooks/babysit.md) supersedes it for pr-status requests.\n\n"
+     "- `/skill-creator` is a cursor built-in. cursor also ships a built-in `/autopilot` that watches a pr. inside `poteto-mode`, "
+     "pr-status requests go to the [babysit playbook](./skills/poteto-mode/playbooks/babysit.md) instead.\n\n"
      "install `cursor-team-kit` alongside pstack if you want the full set.",
      "in cursor, `/deslop`, `control-cli`, and `control-ui` ship in the `cursor-team-kit` plugin. this claude port bundles all three (MIT, "
      "copyright cursor). skill authoring routes to anthropic's `skill-creator` skill in place of cursor's built-in `create-skill`. inside "
      "`poteto-mode`, the [babysit playbook](./skills/poteto-mode/playbooks/babysit.md) handles pr-status requests."),
+    ("README.md",
+     "in claude code:\n\n```bash\n/plugin marketplace add cursor/plugins\n/plugin install pstack@cursor-plugins\n```\n\n"
+     "claude code prefixes plugin commands and agents, so `/poteto-mode` is `/pstack:poteto-mode`. the [claude code adapter]"
+     "(./docs/harness/claude-code.md) maps every other cursor name. in claude code, `/pstack:setup-pstack` writes your model choices to "
+     "`~/.claude/rules/pstack-models.md`, and a step that needs a cursor-only feature, such as bugbot or automations, is skipped with a one-line note.\n\n"
+     "claude code installs a generated copy of pstack, including this readme and the guide, from "
+     "[`harness/pstack/`](https://github.com/cursor/plugins/tree/main/harness/pstack) at the repository root. after you change pstack, run "
+     "`node scripts/generate-pstack-harness-trees.mjs` from the repository root and commit the result. ci fails while the generated copy is out of date.\n\n",
+     ""),
     ("README.md", "cursor already has a great plan mode which works great with pstack.",
      "claude code already has a plan mode which works great with pstack."),
     ("README.md",
@@ -317,7 +356,8 @@ PATCHES = [
      "a rerun keeps any role whose model differs from the default.", "a rerun keeps the roles you changed by hand."),
     ("README.md",
      "to set it up, point cursor at [`FOR_AGENTS.md`](./automations/benny/FOR_AGENTS.md). setup copies the pack into the target repository at "
-     "`.claude/automations/benny/`, enables pstack there for shared skills, and keeps user configuration outside the copied pack.",
+     "`.claude/automations/benny/`, enables pstack there for shared skills, and keeps user configuration outside the copied pack. "
+     "benny runs on cursor automations, so it is cursor-only.",
      "benny runs on cursor automations (slack-triggered cloud agents), which claude has no direct equivalent for, so this port ships the pack "
      "verbatim for reference. in cursor, setup starts by pointing cursor at [`FOR_AGENTS.md`](./automations/benny/FOR_AGENTS.md)."),
 
@@ -334,10 +374,6 @@ PATCHES = [
      "- Durable working state (orchestrate stores, plan files) goes under `~/.claude/pstack/<project-slug>/` unless the operator names a path. "
      "A cloud session's home directory does not persist, so there keep what must survive in the repo or on a pushed branch, and say so.\n"),
     ("skills/poteto-mode/SKILL.md", "Open a todolist whose first items", "Open a task list (TaskCreate, or TodoWrite) whose first items"),
-    ("skills/reflect/SKILL.md",
-     "For each candidate, read the first JSONL line and check that `message.content[0].text` contains the conversation's opening user prompt.",
-     "For each candidate, find the first line whose `type` is `user` and check that its `message.content` contains the conversation's opening "
-     "user prompt. That field is a string, or, when it is an array, the `text` of its first text block."),
     ("skills/poteto-mode/playbooks/orchestrate.md",
      "Create `orchestrate/<project-slug>/` in the current agent's store (path in the system prompt).",
      "Create `~/.claude/pstack/<project-slug>/orchestrate/`, the pstack store poteto-mode names, and pass it to every `orch` call as `ORCH_STORE`."),
@@ -354,13 +390,16 @@ PATCHES = [
      "Each live lane runs on its own cloud VM at the PR head.",
      "Each live lane runs in its own remote agent (`isolation: \"remote\"`) or worktree at the PR head."),
     ("skills/poteto-mode/playbooks/autopilot-full.md",
-     "re-read this playbook from trunk with `git show origin/main:pstack/skills/poteto-mode/playbooks/autopilot-full.md`",
-     "re-read this playbook from the pstack root with `cat <pstack root>/skills/poteto-mode/playbooks/autopilot-full.md` "
-     "(`git show origin/main:<path>` when pstack is vendored in this repo)"),
+     "Each tick re-reads this playbook from trunk and fixes drift,",
+     "Each tick re-reads this playbook from the pstack root (`<pstack root>/skills/poteto-mode/playbooks/autopilot-full.md`, "
+     "or `git show origin/main:<path>` when pstack is vendored in this repo) and fixes drift,"),
+    ("skills/poteto-mode/playbooks/autopilot-full.md",
+     "start a decision trail in the root agent's store (path in the system prompt)",
+     "start a decision trail in the root's pstack store (`~/.claude/pstack/<project-slug>/`, or the repo or a pushed branch in a cloud session)"),
     ("skills/poteto-mode/playbooks/autopilot-stack.md",
-     "re-read this playbook from trunk with `git show origin/main:pstack/skills/poteto-mode/playbooks/autopilot-stack.md`",
-     "re-read this playbook from the pstack root with `cat <pstack root>/skills/poteto-mode/playbooks/autopilot-stack.md` "
-     "(`git show origin/main:<path>` when pstack is vendored in this repo)"),
+     "Each tick re-reads both playbooks from trunk, and this one wins where they differ.",
+     "Each tick re-reads both playbooks from the pstack root (`<pstack root>/skills/poteto-mode/playbooks/`, "
+     "or `git show origin/main:<path>` when pstack is vendored in this repo), and this one wins where they differ."),
     ("skills/poteto-mode/playbooks/worktree-cleanup.md",
      "a hand-typed `myrepo-worktrees/x` misses one that lives at `.cursor/worktrees/myrepo/x`",
      "a hand-typed `myrepo-worktrees/x` misses one that lives at `.claude/worktrees/x`"),
@@ -402,11 +441,25 @@ PATCHES = [
     ("skills/poteto-help/SKILL.md", "| Pick a model for each role and a reasoning budget |", "| Pick a model for each role and a budget |"),
     ("skills/poteto-help/SKILL.md", "or race workers, as cloud agents |", "or race workers, as remote agents |"),
     ("docs/guide/01-setup.md",
+     "\n\nIn Claude Code, run `/plugin marketplace add cursor/plugins`, then `/plugin install pstack@cursor-plugins`. Claude Code prefixes plugin "
+     "commands, so each command in this guide takes a `pstack:` prefix there, such as `/pstack:setup-pstack`, which writes its model rule to "
+     "`~/.claude/rules/pstack-models.md`. The [Claude Code adapter](../harness/claude-code.md) covers the other differences.",
+     ""),
+    ("docs/guide/01-setup.md",
      "detects the models you have access to, asks for a reasoning budget, shows you each role",
      "detects the models you have access to, asks whether the config is just yours or committed with the project, asks for a budget, shows you each role"),
     ("docs/guide/01-setup.md",
      "keeps any role whose model differs from the default.",
      "keeps the roles you changed by hand."),
+    ("skills/ketchup/SKILL.md",
+     "a chart or diagram from `/visualize`, or a generated image.",
+     "a chart or diagram you render (an image, or an artifact where the app offers one), or a generated image."),
+    ("skills/ketchup/SKILL.md",
+     "and a `/visualize` chart for numbers.",
+     "and a chart you render for numbers (a Mermaid chart, an image, or an artifact where the app offers one)."),
+    ("README.md",
+     "pick `/poteto-mode` from the `/` menu before you type your task, so cursor attaches the skill to the message.",
+     "pick `/pstack:poteto-mode` (or the `/poteto-mode` shortcut) from the `/` menu before you type your task, so claude loads the skill with the message."),
     # ---- docs ----------------------------------------------------------------
     ("docs/guide/01-setup.md",
      "In a Cursor chat, run:\n\n```text\n/add-plugin pstack\n```\n\nCursor confirms the plugin is installed.",
@@ -434,7 +487,7 @@ PATCHES = [
      "After setup, start a new chat. Rule files load at session start, so the config applies to new sessions."),
     ("docs/guide/01-setup.md",
      "To keep `/poteto-mode` on for the whole chat, pick it from the `/` menu with Option+Enter (Mac) or Alt+Enter (Windows) instead of Enter. "
-     "That makes it a [Custom Mode](https://cursor.com/docs/skills), which stays in context on every turn until you exit it. Custom Modes are "
+     "That makes it a [Custom Mode](https://cursor.com/docs/skills#using-a-skill-as-a-custom-mode), which stays in context on every turn until you exit it. Custom Modes are "
      "available in the Agents Window and the CLI. Plain Enter attaches the skill to one message, and it fades as the chat moves on.",
      "Once invoked, `/poteto-mode` stays in the conversation and keeps applying for the rest of the chat. Claude has no Custom Modes, so to have it "
      "in every chat, add a rule file such as `~/.claude/rules/poteto-mode.md` saying \"For non-trivial engineering work, load the pstack:poteto-mode skill first.\""),
@@ -496,7 +549,7 @@ def main() -> None:
             continue
         path.write_text(text.replace(old, new, 1))
 
-    (OUT / ".claude-plugin" / "plugin.json").write_text(json.dumps({
+    port_manifest = {
         "name": "pstack",
         "version": f"{UPSTREAM_VERSION}-claude.{PORT_REV}",
         "description": "poteto's pstack, ported from Cursor to Claude. if you want to go fast, go deep first: rigorous agent workflows "
@@ -506,7 +559,13 @@ def main() -> None:
         "repository": "https://github.com/cursor/plugins",
         "license": "MIT",
         "keywords": ["pstack", "poteto-mode", "workflow", "principles", "subagents", "code-review", "unslop"],
-    }, indent=2) + "\n")
+    }
+    (OUT / ".claude-plugin" / "plugin.json").write_text(json.dumps(port_manifest, indent=2) + "\n")
+    # Upstream's Agent Plugins v1 root manifest stays, with the port's identity and version so it never
+    # disagrees with .claude-plugin/plugin.json. Upstream's $schema and any field the port does not set are kept.
+    root_manifest = OUT / "plugin.json"
+    if root_manifest.exists():
+        root_manifest.write_text(json.dumps({**json.loads(root_manifest.read_text()), **port_manifest}, indent=2) + "\n")
     (OUT / "NOTICE.md").write_text(
         "# Notice\n\n"
         "pstack is by Lauren Tan (poteto), MIT licensed. See `LICENSE`. Source: https://github.com/cursor/plugins/tree/main/pstack "
