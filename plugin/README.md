@@ -1,6 +1,6 @@
 # pstack
 
-> **Claude port.** This is [poteto's pstack](https://github.com/cursor/plugins/tree/main/pstack) (Cursor plugin v0.15.28, MIT, by Lauren Tan) translated to Claude. Every skill, playbook, principle, reference, script, and subagent is here, rewired from Cursor's tools to Claude's. The original README follows the port notes.
+> **Claude port.** This is [poteto's pstack](https://github.com/cursor/plugins/tree/main/pstack) (Cursor plugin v0.15.29, MIT, by Lauren Tan) translated to Claude. Every skill, playbook, principle, reference, script, and subagent is here, rewired from Cursor's tools to Claude's. The original README follows the port notes.
 
 ## using it in claude
 
@@ -147,7 +147,7 @@ to keep [`/poteto-mode`](./skills/poteto-mode/SKILL.md) on across turns, just in
 | [`/poteto-mode`](./skills/poteto-mode/SKILL.md) | default entry point for any non-trivial task. |
 | [`/poteto-help`](./skills/poteto-help/SKILL.md) | you're new to pstack, or unsure which skill, playbook, or principle fits. finds out what you're trying to do, answers that part, and hands you a prompt to type. runs only when you type `/poteto-help`. |
 | [`/in-your-own-words`](./skills/in-your-own-words/SKILL.md) | you want the agent to play back your goal and the problem before it starts. runs only when you type `/in-your-own-words`. |
-| [`/sharpen`](./skills/sharpen/SKILL.md) | you want a task approached the way a top expert would, aimed at what you're really after, without overspecifying it or deciding your choices for you. |
+| [`/sharpen`](./skills/sharpen/SKILL.md) | you want a prompt made deeper, not bigger, before you send it: what a top professional would do that you didn't ask for, the raw material they'd start from, their methods and tools, and an outside check that the result is right. hands back the rewritten prompt and leaves your choices open. doesn't do the task. runs only when you type `/sharpen`. |
 | [`/how`](./skills/how/SKILL.md) | you want a walkthrough of how a subsystem works. |
 | [`/why`](./skills/why/SKILL.md) | you want to know why something was built this way. discovers available MCPs at run time and queries each evidence category in parallel (source control, issue tracker, long-form docs, real-time chat, infra observability, error tracking, analytics warehouse). |
 | [`/recall`](./skills/recall/SKILL.md) | you're starting or resuming work and want your recent context on a topic rebuilt from your own chat history and the shared record, handed back as a tight current-state brief. |

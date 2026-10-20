@@ -2,12 +2,13 @@
 
 Newest first. The Claude agent that syncs this repo adds one entry per landed update.
 
-## 0.15.28-claude.1 (2026-10-19)
+## 0.15.29-claude.1 (2026-10-20)
 
-Synced `cursor/plugins@df58112..d457567` (pstack 0.15.15 to 0.15.28). This includes the 0.15.17, 0.15.19, 0.15.21, 0.15.23, and 0.15.25-claude.1 through claude.4 syncs from #2 through #9, which never reached `main`.
+Synced `cursor/plugins@df58112..88d4751` (pstack 0.15.15 to 0.15.29). This includes the 0.15.17, 0.15.19, 0.15.21, 0.15.23, 0.15.25-claude.1 through claude.4, and 0.15.28-claude.1 syncs from #2 through #10, which never reached `main`.
 
 Upstream:
 
+- pstack: restore /sharpen to the original prompt, return only the rewrite (#729)
 - chore(pstack): bump to 0.15.28, sync guide with create-formal-verification-skill (#724)
 - pstack: add maintain-formal-verification-skill (#716)
 - fix(pstack): add TLA+ default and no-verifier fallback to create-formal-verification-skill (#721)
