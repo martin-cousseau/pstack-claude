@@ -2,12 +2,15 @@
 
 Newest first. The Claude agent that syncs this repo adds one entry per landed update.
 
-## 0.15.29-claude.1 (2026-10-20)
+## 0.15.30-claude.1 (2026-10-23)
 
-Synced `cursor/plugins@df58112..88d4751` (pstack 0.15.15 to 0.15.29). This includes the 0.15.17, 0.15.19, 0.15.21, 0.15.23, 0.15.25-claude.1 through claude.4, and 0.15.28-claude.1 syncs from #2 through #10, which never reached `main`.
+Synced `cursor/plugins@df58112..4ec7ffa` (pstack 0.15.15 to 0.15.30). This includes the 0.15.17, 0.15.19, 0.15.21, 0.15.23, 0.15.25-claude.1 through claude.4, 0.15.28-claude.1, and 0.15.29-claude.1 syncs from #2 through #11, which never reached `main`. Adds the `/statechart` skill.
 
 Upstream:
 
+- refactor(pstack): delete statechart comments that repeat the code, and rename helpers (#779)
+- fix(pstack): bring the statechart skill up to date with six fixes (#776)
+- feat(pstack): add the statechart skill to draw TLA+ models as charts (#741)
 - pstack: restore /sharpen to the original prompt, return only the rewrite (#729)
 - chore(pstack): bump to 0.15.28, sync guide with create-formal-verification-skill (#724)
 - pstack: add maintain-formal-verification-skill (#716)
