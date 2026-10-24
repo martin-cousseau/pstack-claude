@@ -162,7 +162,8 @@ def main() -> None:
     (OUT / "skills" / "pstack").mkdir()
     shutil.copy(Path(PATCHES / "pstack-router.md"), OUT / "skills" / "pstack" / "SKILL.md")
 
-    # worktree-audit: Claude Code transcript dirs, GNU/BSD-portable stat and date.
+    # worktree-audit: Claude Code transcript dirs. Upstream picks GNU or BSD stat
+    # and date flags (stat_fmt, fmt_day); the port reuses them.
     audit = OUT / "skills/poteto-mode/scripts/worktree-audit.sh"
     src = audit.read_text()
     for old, new in [
@@ -172,9 +173,9 @@ def main() -> None:
          Path(PATCHES / "audit-header.sh").read_text()),
         ('\tif [ -d "$transcripts" ]; then\n'
          '\t\tf=$(rg -l -e "${wt}/" -e "${wt}\\"" "$transcripts" 2>/dev/null \\\n'
-         '\t\t\t| xargs stat -f \'%m %N\' 2>/dev/null | sort -rn | head -1)\n'
+         '\t\t\t| xargs stat "${stat_fmt[@]}" 2>/dev/null | sort -rn | head -1)\n'
          '\t\tif [ -n "$f" ]; then last_ts=$(echo "$f" | awk \'{print $1}\')\n'
-         '\t\t\tlast=$(date -r "$last_ts" \'+%Y-%m-%d\' 2>/dev/null); fi\n',
+         '\t\t\tlast=$(fmt_day "$last_ts" 2>/dev/null); fi\n',
          Path(PATCHES / "audit-loop.sh").read_text()),
     ]:
         if old not in src:

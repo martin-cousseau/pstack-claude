@@ -2,12 +2,25 @@
 
 Newest first. The Claude agent that syncs this repo adds one entry per landed update.
 
-## 0.15.30-claude.1 (2026-10-23)
+## 0.15.32-claude.1 (2026-10-24)
 
-Synced `cursor/plugins@df58112..4ec7ffa` (pstack 0.15.15 to 0.15.30). This includes the 0.15.17, 0.15.19, 0.15.21, 0.15.23, 0.15.25-claude.1 through claude.4, 0.15.28-claude.1, and 0.15.29-claude.1 syncs from #2 through #11, which never reached `main`. Adds the `/statechart` skill.
+Synced `cursor/plugins@df58112..9580c23` (pstack 0.15.15 to 0.15.32). This includes the 0.15.17, 0.15.19, 0.15.21, 0.15.23, 0.15.25-claude.1 through claude.4, 0.15.28-claude.1, 0.15.29-claude.1, and 0.15.30-claude.1 syncs from #2 through #12, which never reached `main`. Adds the `/statechart` and `/ketchup-video` skills.
 
 Upstream:
 
+- fix(pstack): renumber swarm's Phase A and fix its dangling table reference (#807)
+- docs(pstack): note Claude Code auto-update is off for third-party marketplaces (#806)
+- fix(pstack): read transcript mtimes with GNU stat and date in worktree-audit (#805)
+- fix(orch): prefer active PR over branch history (#804)
+- fix(pstack): recognize matching inline code delimiters (#803)
+- fix(watch-pr): cap polling sleeps at the deadline (#802)
+- fix(watch-pr): distinguish fork heads during stack discovery (#801)
+- fix(pstack): route reflect edits out of the plugin cache (#800)
+- chore(pstack): bump to 0.15.32 (#798)
+- feat(pstack): add the ketchup-video skill (#797)
+- feat(pstack): tell generated verify skills to read each model-check result with /statechart (#794)
+- chore(pstack): bump to 0.15.31 (#792)
+- feat(pstack): bring the statechart skill up to date, with the Pele renderer (#791)
 - refactor(pstack): delete statechart comments that repeat the code, and rename helpers (#779)
 - fix(pstack): bring the statechart skill up to date with six fixes (#776)
 - feat(pstack): add the statechart skill to draw TLA+ models as charts (#741)
@@ -60,6 +73,9 @@ Upstream:
 
 Port changes:
 
+- `worktree-audit.sh`: upstream now picks GNU or BSD `stat` and `date` flags once (`stat_fmt`, `fmt_day`). The port's transcript loop reuses them, so its own `mtime` helper and `date` fallback are gone. It still stats one path per line, so transcript paths with spaces work.
+- Upstream's new README note on Claude Code auto-update is deleted with the rest of its Claude Code install block, since it names upstream's `cursor-plugins` marketplace. The port header gets the same note for `pstack-claude`.
+- `/ketchup-video`, the `/statechart` update, the `/statechart` pointer in `/create-formal-verification-skill`, the `reflect` plugin-cache rule, and the `swarm` renumbering ship as is. They have no Cursor-specific wording left after the existing rewrites.
 - `/create-formal-verification-skill` and `/maintain-formal-verification-skill` ship as is. They have no Cursor-specific wording.
 - `/setup-pstack` is a port-owned file, so upstream's new "offer a formal verification skill" step is ported by hand as step 9 of `tools/patches/setup-pstack.md`. It names `/pstack:create-formal-verification-skill` and Reads that skill's `SKILL.md` from the plugin root, like the step 8 verification offer.
 - The `/poteto-help` "built for Cursor" patch drifted: upstream split it into a Claude Code install paragraph (pointing at the adapter the port leaves out) and an "other tools" paragraph. Both are replaced with the port's existing Claude paragraph.

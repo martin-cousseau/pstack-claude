@@ -47,6 +47,14 @@ origin/*) git fetch origin "+refs/heads/${base#origin/}:refs/remotes/$base" --qu
 esac
 git rev-parse --verify --quiet "$base^{commit}" >/dev/null 2>&1 || { echo "error: base ref not found: $base" >&2; exit 1; }
 
+# GNU coreutils (Linux, Homebrew gnubin) reads `stat -f` as file system status
+# and `date -r` as a file, so pick the stat and date flags once.
+if stat -c %Y / >/dev/null 2>&1; then
+	stat_fmt=(-c '%Y %n'); fmt_day() { date -d "@$1" '+%Y-%m-%d'; }
+else
+	stat_fmt=(-f '%m %N'); fmt_day() { date -r "$1" '+%Y-%m-%d'; }
+fi
+
 # PR state by branch, fetched once as [{number, state, head}] with a lowercase
 # state. Origin when its CLI can read this repo's PRs, otherwise gh. Empty when
 # neither can.
@@ -67,7 +75,6 @@ fi
 # A session started inside a worktree lives under that worktree's own slug, so
 # each row scans the main repo's dirs and the worktree's dirs.
 slugify() { printf '%s' "$1" | sed 's#[^A-Za-z0-9]#-#g' | cut -c1-200; }
-mtime() { stat -c '%Y %n' "$1" 2>/dev/null || stat -f '%m %N' "$1"; }
 projects="$HOME/.claude/projects"
 now=$(date +%s)
 
@@ -114,9 +121,9 @@ git worktree list --porcelain | awk '/^worktree /{print $2}' | while read -r wt;
 	done
 	if [ "${#tdirs[@]}" -gt 0 ]; then
 		f=$(rg -l -e "${wt}/" -e "${wt}\"" "${tdirs[@]}" 2>/dev/null \
-			| while read -r p; do mtime "$p"; done | sort -rn | head -1)
+			| while read -r p; do stat "${stat_fmt[@]}" "$p" 2>/dev/null; done | sort -rn | head -1)
 		if [ -n "$f" ]; then last_ts=$(echo "$f" | awk '{print $1}')
-			last=$(date -r "$last_ts" '+%Y-%m-%d' 2>/dev/null || date -d "@$last_ts" '+%Y-%m-%d'); fi
+			last=$(fmt_day "$last_ts" 2>/dev/null); fi
 	fi
 	recent=$([ "$last_ts" -gt 0 ] 2>/dev/null && [ $(( (now - last_ts) / 86400 )) -le 4 ] && echo yes || echo no)
 

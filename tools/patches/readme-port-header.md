@@ -6,6 +6,7 @@
 - `/pstack:pstack <anything>` routes for you: a task goes to `poteto-mode`, a skill named with a slash (`/pstack:pstack /how do we cancel runs?`) goes to that skill, and a question about pstack goes to `poteto-help`.
 - two optional personal shortcut skills, `pstack` and `poteto-mode`, let you type `/pstack` and `/poteto-mode` with no prefix. they just hand off to the plugin.
 - run `/pstack:setup-pstack` once. it writes `pstack-models.md` as an always-loaded rule in `.claude/rules/`.
+- claude code leaves auto-update off for third-party marketplaces, so the plugin stays on the version you installed. to turn it on, run `/plugin`, open the **marketplaces** tab, select `pstack-claude`, and choose **enable auto-update**. to update once by hand, run `claude plugin update pstack@pstack-claude`.
 
 ## what changed from cursor
 
