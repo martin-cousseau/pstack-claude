@@ -6,6 +6,7 @@
 - `/pstack:pstack <anything>` routes for you: a task goes to `poteto-mode`, a skill named with a slash (`/pstack:pstack /how do we cancel runs?`) goes to that skill, and a question about pstack goes to `poteto-help`.
 - two optional personal shortcut skills, `pstack` and `poteto-mode`, let you type `/pstack` and `/poteto-mode` with no prefix. they just hand off to the plugin.
 - run `/pstack:setup-pstack` once. it writes `pstack-models.md` as an always-loaded rule in `.claude/rules/`.
+- claude code leaves auto-update off for third-party marketplaces, so the plugin stays on the version you installed. to turn it on, run `/plugin`, open the **marketplaces** tab, select `pstack-claude`, and choose **enable auto-update**. to update once by hand, run `claude plugin update pstack@pstack-claude`.
 
 ## what changed from cursor
 
@@ -27,6 +28,7 @@
 ## not ported
 
 - `make-bot-ui` drives cursor's grok bot webhook routines. it ships unchanged, marked cursor-only.
+- upstream's own claude code install (`/plugin install pstack@cursor-plugins`) keeps the cursor names and maps them at runtime through an adapter, `docs/harness/claude-code.md`. this port translates the skills instead, so it leaves out the adapter and those install lines.
 - the benny automation pack runs on cursor automations. it ships verbatim under `automations/benny/` for reference.
 - `watch-pr` and `orch` need [bun](https://bun.sh) and `gh`. stacked-pr flows also use `gt` (graphite). the first run does a `bun install` next to the scripts (`commander`, plus the `typescript` and `bun-types` dev dependencies), so the plugin directory must be writable.
 
